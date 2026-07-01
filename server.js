@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   const host = req.get('host');
   const hostname = host?.split(':')[0]; // Remove porta se existir
   console.log(`Host header: ${host}, Hostname: ${hostname}`);
-  if (hostname === 'vidatriunfante.com') {
+  if (hostname === 'meditarfe.com') {
     const newHost = `www.${hostname}${host.includes(':') ? ':' + host.split(':')[1] : ''}`;
     console.log(`Redirecting to ${newHost}`);
     return res.redirect(301, `${req.protocol}://${newHost}${req.originalUrl}`);
