@@ -49,10 +49,8 @@ RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 
 CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-1.5-pro',
-    contents: prompt,
-  });
+  const model = ai.getModel('gemini-2.0-flash-exp');
+  const response = await model.generateContent(prompt);
   const content = response.text.trim();
 
   const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -192,10 +190,8 @@ Importante:
 - Escolha versículos que se conectam PROFUNDAMENTE com o tema, não superficialmente.
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-1.5-pro',
-    contents: prompt,
-  });
+  const model = ai.getModel('gemini-2.0-flash-exp');
+  const response = await model.generateContent(prompt);
   const content = response.text.trim();
 
   // Extrai o JSON da resposta
