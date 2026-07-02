@@ -195,11 +195,8 @@ function renderizarDevocional(d) {
     }
   }
 
-  // Mostra notas pessoais e frase final para casal
+  // Mostra frase final para casal
   if (IS_CASAL) {
-    const notasEl = document.getElementById('notas-section');
-    if (notasEl) notasEl.classList.remove('hidden');
-
     const fraseEl = document.getElementById('fraseInspiradora');
     if (fraseEl) {
       fraseEl.textContent = 'A paciência é o amor se tornando visível. ❤️';
