@@ -8,6 +8,9 @@ const IS_ELA        = typeof ELA_MODE !== 'undefined' && ELA_MODE;
 const IS_CASAL      = typeof CASAL_MODE !== 'undefined' && CASAL_MODE;
 let _twTimer        = null;
 
+console.log('[Modo] HFC:', IS_HFC, 'ELE:', IS_ELE, 'ELA:', IS_ELA, 'CASAL:', IS_CASAL);
+console.log('[API Base]', getApiBase?.() || 'não inicializado');
+
 function getApiBase() {
   if (IS_HFC) return '/api/hfc';
   if (IS_ELE) return '/api/ele';
@@ -91,10 +94,13 @@ async function carregarDevocional(data) {
     const base = getApiBase();
     const url  = data === dataHoje() ? `${base}/hoje` : `${base}/${data}`;
 
+    console.log('[Fetch]', url);
     const res = await fetch(url);
+    console.log('[Response]', res.status, res.ok);
     if (!res.ok) throw new Error('Não encontrado');
 
     const devocional = await res.json();
+    console.log('[Devocional]', devocional.tema);
     devocionalAtual = devocional;
     dataAtual = devocional.data;
 
