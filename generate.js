@@ -50,7 +50,7 @@ RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-pro',
+    model: 'gemini-1.5-pro',
     contents: prompt,
   });
   const content = response.text.trim();
@@ -193,7 +193,7 @@ Importante:
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-pro',
+    model: 'gemini-1.5-pro',
     contents: prompt,
   });
   const content = response.text.trim();
