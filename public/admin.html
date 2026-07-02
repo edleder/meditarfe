@@ -43,6 +43,9 @@
         <div class="nav-group-label">Palavra</div>
         <a class="nav-item" onclick="mostrarAba('devocional')"      data-aba="devocional">📖 Devocional Geral</a>
         <a class="nav-item" onclick="mostrarAba('hfc')"             data-aba="hfc">🛡️ Devocional HFC</a>
+        <a class="nav-item" onclick="mostrarAba('ele')"             data-aba="ele">💪 Para Homem</a>
+        <a class="nav-item" onclick="mostrarAba('ela')"             data-aba="ela">👩 Para Mulher</a>
+        <a class="nav-item" onclick="mostrarAba('casal')"           data-aba="casal">💕 Para Casal</a>
         <a class="nav-item" onclick="mostrarAba('gerar')"           data-aba="gerar">🤖 Gerar com IA</a>
       </div>
       <div class="nav-group">
@@ -126,6 +129,33 @@
         <div id="lista-hfc"></div>
       </section>
 
+      <!-- ── Devocional Para Homem ── -->
+      <section class="aba hidden" id="aba-ele">
+        <div class="page-header">
+          <h1>Devocional Para Homem</h1>
+          <button class="btn-primary" onclick="abrirFormDevocional('ele')">+ Novo</button>
+        </div>
+        <div id="lista-ele"></div>
+      </section>
+
+      <!-- ── Devocional Para Mulher ── -->
+      <section class="aba hidden" id="aba-ela">
+        <div class="page-header">
+          <h1>Devocional Para Mulher</h1>
+          <button class="btn-primary" onclick="abrirFormDevocional('ela')">+ Novo</button>
+        </div>
+        <div id="lista-ela"></div>
+      </section>
+
+      <!-- ── Devocional Para Casal ── -->
+      <section class="aba hidden" id="aba-casal">
+        <div class="page-header">
+          <h1>Devocional Para Casal</h1>
+          <button class="btn-primary" onclick="abrirFormDevocional('casal')">+ Novo</button>
+        </div>
+        <div id="lista-casal"></div>
+      </section>
+
       <!-- ── Gerar com IA ── -->
       <section class="aba hidden" id="aba-gerar">
         <div class="page-header"><h1>Gerar com IA</h1></div>
@@ -136,6 +166,9 @@
               <select id="gTipo">
                 <option value="geral">Devocional Geral</option>
                 <option value="hfc">Devocional HFC</option>
+                <option value="ele">Para Homem</option>
+                <option value="ela">Para Mulher</option>
+                <option value="casal">Para Casal</option>
               </select>
             </div>
             <div class="form-group">

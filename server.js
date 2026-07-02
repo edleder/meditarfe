@@ -640,6 +640,9 @@ if (process.env.GEMINI_API_KEY) {
   cron.schedule('5 0 * * *', async () => {
     try { await gerarDevocional(null, 'geral'); } catch (e) { console.error('[CRON geral]', e.message); }
     try { await gerarDevocional(null, 'hfc');   } catch (e) { console.error('[CRON hfc]', e.message); }
+    try { await gerarDevocional(null, 'ele');   } catch (e) { console.error('[CRON ele]', e.message); }
+    try { await gerarDevocional(null, 'ela');   } catch (e) { console.error('[CRON ela]', e.message); }
+    try { await gerarDevocional(null, 'casal'); } catch (e) { console.error('[CRON casal]', e.message); }
   }, { timezone: 'America/Sao_Paulo' });
 }
 

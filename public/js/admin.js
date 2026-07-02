@@ -96,6 +96,9 @@ const ABA_LOADERS = {
   dashboard:    carregarDashboard,
   devocional:   () => carregarDevocionais('geral'),
   hfc:          () => carregarDevocionais('hfc'),
+  ele:          () => carregarDevocionais('ele'),
+  ela:          () => carregarDevocionais('ela'),
+  casal:        () => carregarDevocionais('casal'),
   anuncios:     carregarAnuncios,
   comunicados:  carregarComunicados,
   eventos:      carregarEventos,
@@ -228,7 +231,8 @@ function fecharTodosModais() {
 async function carregarDevocionais(tipo) {
   const r = await api('GET', `/api/admin/devocionais?tipo=${tipo}`);
   const data = await r.json();
-  const containerId = tipo === 'hfc' ? 'lista-hfc' : 'lista-devocional';
+  const containerMap = { 'hfc': 'lista-hfc', 'ele': 'lista-ele', 'ela': 'lista-ela', 'casal': 'lista-casal' };
+  const containerId = containerMap[tipo] || 'lista-devocional';
   const container = document.getElementById(containerId);
 
   if (!data.devocionais?.length) {

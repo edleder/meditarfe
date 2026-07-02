@@ -7,7 +7,14 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 async function gerarDevocional(data, tipo = 'geral') {
   const dataObj = data ? new Date(data + 'T12:00:00') : new Date();
   const dataStr = dataObj.toISOString().split('T')[0];
-  const tabela  = tipo === 'hfc' ? 'devocionais_hfc' : 'devocionais';
+
+  const tabelaMap = {
+    'hfc': 'devocionais_hfc',
+    'ele': 'devocionais_ele',
+    'ela': 'devocionais_ela',
+    'casal': 'devocionais_casal'
+  };
+  const tabela = tabelaMap[tipo] || 'devocionais';
 
   // Verifica se já existe
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
@@ -25,11 +32,15 @@ async function gerarDevocional(data, tipo = 'geral') {
     ? `\n\nVERSÍCULOS JÁ USADOS RECENTEMENTE (NÃO repita nenhum destes): ${versiculosUsados}`
     : '';
 
-  const contextoHFC = tipo === 'hfc'
-    ? 'Este devocional é especificamente para o grupo HFC (Homens Fortes e Corajosos) — homens cristãos buscando ser líderes piedosos em suas famílias e comunidades. Aborde temas como paternidade, liderança servil, integridade, coragem e fé masculina.'
-    : 'Este devocional é para todos os membros da igreja.';
+  const contextoMap = {
+    'hfc': 'Este devocional é especificamente para o grupo HFC (Homens Fortes e Corajosos) — homens cristãos buscando ser líderes piedosos em suas famílias e comunidades. Aborde temas como paternidade, liderança servil, integridade, coragem e fé masculina.',
+    'ele': 'Este devocional é para homens cristãos em seu caminho de fé. Aborde temas como força espiritual, vulnerabilidade, paternidade, liderança doméstica, integridade e amor sacrificial. Fale a linguagem do homem.',
+    'ela': 'Este devocional é para mulheres cristãs em seu caminho de fé. Aborde temas como valorização pessoal, beleza interior, força feminina, maternidade, sabedoria, graça e fé que transforma.',
+    'casal': 'Este devocional é para casais cristãos desejando crescer juntos na fé. Aborde temas como amor, paciência, perdão, comunicação, intimidade espiritual, unidade e construção do lar.'
+  };
+  const contexto = contextoMap[tipo] || 'Este devocional é para todos os membros da igreja.';
 
-  const prompt = `Você é um pastor evangélico brasileiro criando um devocional diário. ${contextoHFC}
+  const prompt = `Você é um pastor evangélico brasileiro criando um devocional diário. ${contexto}
 
 Gere um devocional completo para hoje (${dataStr}) com:
 1. Um versículo bíblico (preferencialmente do Novo Testamento ou Salmos)
