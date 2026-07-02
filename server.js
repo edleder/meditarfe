@@ -32,12 +32,11 @@ app.use(express.json());
 // Redirect sem www para www
 app.use((req, res, next) => {
   const host = req.get('host');
-  const hostname = host?.split(':')[0]; // Remove porta se existir
-  console.log(`Host header: ${host}, Hostname: ${hostname}`);
+  const hostname = host?.split(':')[0];
   if (hostname === 'meditarfe.com') {
     const newHost = `www.${hostname}${host.includes(':') ? ':' + host.split(':')[1] : ''}`;
-    console.log(`Redirecting to ${newHost}`);
-    return res.redirect(301, `${req.protocol}://${newHost}${req.originalUrl}`);
+    const protocol = req.get('x-forwarded-proto') || req.protocol;
+    return res.redirect(301, `${protocol}://${newHost}${req.originalUrl}`);
   }
   next();
 });
