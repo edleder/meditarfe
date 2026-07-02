@@ -4,6 +4,93 @@ const db = require('./database');
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+async function gerarDevocionalCasal(dataStr) {
+  const tabela = 'devocionais_casal';
+
+  // Verifica se já existe
+  const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
+  if (existente) {
+    console.log(`Devocional casal para ${dataStr} já existe.`);
+    return existente;
+  }
+
+  console.log(`Gerando devocional CASAL completo para ${dataStr}...`);
+
+  // Busca versículos recentes
+  const recentes = db.prepare(`SELECT versiculo_referencia FROM ${tabela} ORDER BY data DESC LIMIT 20`).all();
+  const versiculosUsados = recentes.map(r => r.versiculo_referencia).join(', ');
+  const avisoRepeticao = versiculosUsados ? `\n\nVERSÍCULOS JÁ USADOS (NÃO repita): ${versiculosUsados}` : '';
+
+  const prompt = `Você é um pastor evangélico brasileiro criando um devocional COMPLETO e PROFUNDO para casais cristãos.
+
+GERE UM DEVOCIONAL PARA CASAL NESTE FORMATO EXATO - com TODAS as 7 seções:
+
+Tema: [Um tema profundo sobre relacionamento cristão]
+Passagem do Dia: [Versículo - escolha com cuidado]
+Reflexão: [Reflexão honesta, 4-5 frases, abordando desafios reais dos casais, não genérica]
+Meditação Guiada: [4 pontos de meditação que eles fazem LADO A LADO]
+Conversa entre Vocês: [3 perguntas vulneráveis e específicas para o casal responder]
+Oração Compartilhada: [Oração para rezar de mãos dadas, personalizada ao tema]
+Ação do Dia: [2-3 ações práticas e específicas para fazer JUNTOS hoje]
+Versículos Complementares: [4-5 versículos com temas relacionados]
+
+Responda APENAS com JSON válido neste formato:
+{
+  "versiculo_referencia": "Livro capítulo:versículo",
+  "versiculo_texto": "Texto completo",
+  "reflexao": "Reflexão...",
+  "meditacao_guiada": "Sente-se...",
+  "conversa": "Façam estas perguntas...",
+  "oracao": "Orem juntos...",
+  "acao": "Escolha uma coisa...",
+  "versiculos_complementares": "• Versículo 1\\n• Versículo 2...",
+  "tema": "Tema do dia"
+}
+
+IMPORTANTE:
+- Seja PROFUNDO e REAL — fale sobre conflitos, perdão, intimidade, paciência, unidade
+- A meditação deve ser JUNTOS, não um para o outro
+- As perguntas devem ser VULNERÁVEIS — sobre sentimentos, necessidades, medo
+- A oração deve incluir [nome] para que cada um pense no cônjuge
+- As ações devem ser CONCRETAS — abraço, oração, conversa, silêncio juntos
+- Varie temas: paciência, perdão, intimidade, comunicação, amor sacrificial, unidade, liderança, submissão${avisoRepeticao}`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: prompt,
+  });
+  const content = response.text.trim();
+
+  const jsonMatch = content.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('Resposta inválida da API: ' + content);
+  }
+
+  const devocional = JSON.parse(jsonMatch[0]);
+
+  // Salva no banco com TODOS os campos
+  db.prepare(`
+    INSERT OR REPLACE INTO ${tabela}
+    (data, versiculo_referencia, versiculo_texto, reflexao, pratica, tema, meditacao_guiada, conversa, oracao, acao, versiculos_complementares)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    dataStr,
+    devocional.versiculo_referencia,
+    devocional.versiculo_texto,
+    devocional.reflexao,
+    devocional.reflexao, // pratica recebe a reflexão como fallback
+    devocional.tema,
+    devocional.meditacao_guiada,
+    devocional.conversa,
+    devocional.oracao,
+    devocional.acao,
+    devocional.versiculos_complementares
+  );
+
+  console.log(`Devocional casal gerado com sucesso para ${dataStr}:`, devocional.versiculo_referencia);
+  return devocional;
+}
+
 async function gerarDevocional(data, tipo = 'geral') {
   const dataObj = data ? new Date(data + 'T12:00:00') : new Date();
   const dataStr = dataObj.toISOString().split('T')[0];
@@ -15,6 +102,11 @@ async function gerarDevocional(data, tipo = 'geral') {
     'casal': 'devocionais_casal'
   };
   const tabela = tabelaMap[tipo] || 'devocionais';
+
+  // Para casal, usa função específica com formato completo
+  if (tipo === 'casal') {
+    return await gerarDevocionalCasal(dataStr);
+  }
 
   // Verifica se já existe
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
