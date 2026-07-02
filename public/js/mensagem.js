@@ -124,11 +124,17 @@ function renderizarDevocional(d) {
   document.getElementById('pratica').textContent       = d.pratica;
   document.getElementById('temaBadge').textContent     = d.tema || '';
 
+  // Para casal, mostra o título do devocional
+  const titEl = document.getElementById('devocionalTitulo');
+  if (titEl) {
+    titEl.textContent = d.tema ? `"${d.tema}"` : '';
+  }
+
   document.getElementById('videoDate').textContent = formatarDataBR(d.data);
   document.getElementById('videoRef').textContent  = d.versiculo_referencia;
 
-  // Mostra/esconde campos adicionais (meditacao, conversa, oracao, acao, versiculos)
-  const secoes = ['meditacao-section', 'conversa-section', 'oracao-section', 'acao-section', 'versiculos-section'];
+  // Mostra/esconde campos adicionais (meditacao, conversa, oracao, acao, versiculos, notas)
+  const secoes = ['meditacao-section', 'conversa-section', 'oracao-section', 'acao-section', 'versiculos-section', 'notas-section'];
   secoes.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.add('hidden');
@@ -167,6 +173,17 @@ function renderizarDevocional(d) {
     if (el) {
       document.getElementById('versiculos-conteudo').textContent = d.versiculos_complementares;
       el.classList.remove('hidden');
+    }
+  }
+
+  // Mostra notas pessoais e frase final para casal
+  if (IS_CASAL) {
+    const notasEl = document.getElementById('notas-section');
+    if (notasEl) notasEl.classList.remove('hidden');
+
+    const fraseEl = document.getElementById('fraseInspiradora');
+    if (fraseEl) {
+      fraseEl.textContent = 'A paciência é o amor se tornando visível. ❤️';
     }
   }
 

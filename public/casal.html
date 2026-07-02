@@ -53,77 +53,98 @@
         <div class="slide" id="slideDevo">
           <main class="card devocional-card" id="devocionalCard">
 
+            <!-- Título e Data -->
             <div class="card-hero">
               <div class="card-date" id="cardDate">• carregando •</div>
-              <div class="versiculo-ref" id="versiculoRef">—</div>
-              <blockquote class="versiculo-texto" id="versiculoTexto"></blockquote>
+              <h2 id="devocionalTitulo" style="font-size: 1.5em; margin: 0.5em 0; text-align: center;">—</h2>
+              <div class="tema-badge" id="temaBadge" style="margin-top: 0.5em;"></div>
             </div>
 
             <div class="card-body">
+              <!-- Passagem do Dia -->
               <div class="card-section">
                 <div class="section-label">
-                  <span class="section-label-text" id="labelReflexao">Reflexão</span>
+                  <span class="section-label-text">📖 Passagem do Dia</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="reflexao">—</p>
+                <div class="versiculo-ref" id="versiculoRef" style="margin-bottom: 0.5em; font-weight: bold;">—</div>
+                <blockquote class="versiculo-texto" id="versiculoTexto" style="border-left: 3px solid #e0d5ff; padding-left: 1em; margin-left: 0; font-style: italic;"></blockquote>
               </div>
 
               <div class="ornament">· · ·</div>
 
+              <!-- Reflexão -->
               <div class="card-section">
                 <div class="section-label">
-                  <span class="section-label-text" id="labelPratica">Prática</span>
+                  <span class="section-label-text">🤝 Reflexão</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="pratica">—</p>
+                <p class="section-body" id="reflexao" style="white-space: pre-wrap; line-height: 1.6;">—</p>
               </div>
 
-              <!-- Meditação Guiada (para casal e outros) -->
+              <!-- Meditação Guiada -->
               <div class="card-section hidden" id="meditacao-section">
                 <div class="section-label">
-                  <span class="section-label-text">Meditação Guiada</span>
+                  <span class="section-label-text">🧘 Meditação Guiada</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="meditacao-conteudo" style="white-space: pre-wrap;">—</p>
+                <p class="section-body" id="meditacao-conteudo" style="white-space: pre-wrap; line-height: 1.6;">—</p>
               </div>
 
-              <!-- Conversa (para casal) -->
+              <!-- Conversa entre Vocês -->
               <div class="card-section hidden" id="conversa-section">
                 <div class="section-label">
-                  <span class="section-label-text">Conversa entre Vocês</span>
+                  <span class="section-label-text">💬 Conversa entre Vocês</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="conversa-conteudo" style="white-space: pre-wrap;">—</p>
+                <p class="section-body" id="conversa-conteudo" style="white-space: pre-wrap; line-height: 1.6;">—</p>
               </div>
 
-              <!-- Oração Compartilhada (para casal) -->
+              <!-- Oração Compartilhada -->
               <div class="card-section hidden" id="oracao-section">
                 <div class="section-label">
-                  <span class="section-label-text">Oração Compartilhada</span>
+                  <span class="section-label-text">🙏 Oração Compartilhada</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="oracao-conteudo" style="white-space: pre-wrap;">—</p>
+                <blockquote style="border-left: 3px solid #e0d5ff; padding-left: 1em; margin-left: 0; background: rgba(224, 213, 255, 0.2); padding: 1em; border-radius: 4px;">
+                  <p class="section-body" id="oracao-conteudo" style="white-space: pre-wrap; line-height: 1.6; margin: 0;">—</p>
+                </blockquote>
               </div>
 
               <!-- Ação do Dia -->
               <div class="card-section hidden" id="acao-section">
                 <div class="section-label">
-                  <span class="section-label-text">Ação do Dia</span>
+                  <span class="section-label-text">⭐ Ação do Dia</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="acao-conteudo" style="white-space: pre-wrap;">—</p>
+                <p class="section-body" id="acao-conteudo" style="white-space: pre-wrap; line-height: 1.6;">—</p>
               </div>
 
               <!-- Versículos Complementares -->
               <div class="card-section hidden" id="versiculos-section">
                 <div class="section-label">
-                  <span class="section-label-text">Versículos Complementares</span>
+                  <span class="section-label-text">✨ Versículos Complementares</span>
                   <div class="section-label-line"></div>
                 </div>
-                <p class="section-body" id="versiculos-conteudo" style="white-space: pre-wrap;">—</p>
+                <p class="section-body" id="versiculos-conteudo" style="white-space: pre-wrap; line-height: 1.8;">—</p>
               </div>
 
-              <div class="tema-badge" id="temaBadge"></div>
+              <!-- Notas Pessoais -->
+              <div class="card-section hidden" id="notas-section">
+                <div class="section-label">
+                  <span class="section-label-text">📝 Notas Pessoais</span>
+                  <div class="section-label-line"></div>
+                </div>
+                <p style="font-size: 0.9em; color: #999; margin-bottom: 0.5em;">Anotem promessas que vocês fizeram hoje, onde Deus falou, ou como querem crescer.</p>
+                <div style="border: 1px dashed #ddd; padding: 1em; margin: 0.5em 0; min-height: 100px; background: rgba(255,255,255,0.5); border-radius: 4px; font-family: 'Courier New', monospace; color: #999;">
+                  <div style="margin-bottom: 0.5em;">_____________________________________________________________</div>
+                  <div style="margin-bottom: 0.5em;">_____________________________________________________________</div>
+                  <div>_____________________________________________________________</div>
+                </div>
+              </div>
+
+              <!-- Frase Final -->
+              <div style="text-align: center; margin-top: 1.5em; font-style: italic; color: #d084d0; font-size: 0.95em; font-weight: 500;" id="fraseInspiradora"></div>
             </div>
 
           </main>
