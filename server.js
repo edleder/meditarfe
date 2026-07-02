@@ -647,7 +647,7 @@ if (process.env.GEMINI_API_KEY) {
 app.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════════════╗
-║         IVT Devocional - Servidor            ║
+║         MeditarFé - Devocional Servidor      ║
 ╠══════════════════════════════════════════════╣
 ║  Site:  ${BASE_URL}
 ║  Admin: ${BASE_URL}/admin

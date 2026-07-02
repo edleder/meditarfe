@@ -272,7 +272,7 @@ if (rowLinks.n === 0) {
 
 // Seed configurações
 const cfgsDefault = [
-  ['nome_igreja', 'Igreja Vida Triunfante'],
+  ['nome_igreja', 'MeditarFé'],
   ['site_url', 'https://www.meditarfe.com'],
   ['contato_email', ''],
   ['contato_telefone', ''],

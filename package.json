@@ -1,7 +1,7 @@
 {
-  "name": "ivt-devocional",
+  "name": "meditarfe-devocional",
   "version": "1.0.0",
-  "description": "Devocional diário via NFC - IVT",
+  "description": "Devocional diário via NFC - MeditarFé",
   "main": "server.js",
   "scripts": {
     "start": "node --experimental-sqlite server.js",
