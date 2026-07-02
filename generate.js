@@ -1,10 +1,14 @@
 require('dotenv').config();
+const Anthropic = require('@anthropic-ai/sdk');
 const db = require('./database');
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 async function gerarDevocionalCasal(dataStr) {
   const tabela = 'devocionais_casal';
 
-  // Verifica se já existe
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
   if (existente) {
     console.log(`Devocional casal para ${dataStr} já existe.`);
@@ -13,7 +17,6 @@ async function gerarDevocionalCasal(dataStr) {
 
   console.log(`Gerando devocional CASAL completo para ${dataStr}...`);
 
-  // Busca versículos recentes
   const recentes = db.prepare(`SELECT versiculo_referencia FROM ${tabela} ORDER BY data DESC LIMIT 20`).all();
   const versiculosUsados = recentes.map(r => r.versiculo_referencia).join(', ');
   const avisoRepeticao = versiculosUsados ? `\n\nVERSÍCULOS JÁ USADOS (NÃO repita): ${versiculosUsados}` : '';
@@ -46,27 +49,21 @@ RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 
 CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY não está configurada');
-
-  const fetchResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=' + apiKey, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-    }),
+  const message = await anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 2048,
+    messages: [
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
   });
 
-  if (!fetchResponse.ok) {
-    const error = await fetchResponse.json();
-    throw new Error('Erro da API Gemini: ' + (error.error?.message || fetchResponse.statusText));
-  }
-
-  const result = await fetchResponse.json();
-  const content = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const content = message.content[0]?.type === 'text' ? message.content[0].text : '';
 
   if (!content) {
-    throw new Error('API retornou resposta vazia');
+    throw new Error('Claude não retornou resposta');
   }
 
   const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -76,7 +73,6 @@ CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo
 
   const devocional = JSON.parse(jsonMatch[0]);
 
-  // Garante que todos os campos obrigatórios existem
   if (!devocional.versiculo_referencia) devocional.versiculo_referencia = 'Versículo não informado';
   if (!devocional.versiculo_texto) devocional.versiculo_texto = 'Texto não informado';
   if (!devocional.reflexao) devocional.reflexao = 'Reflexão não gerada';
@@ -87,7 +83,6 @@ CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo
   if (!devocional.acao) devocional.acao = '[Aguardando geração...]';
   if (!devocional.versiculos_complementares) devocional.versiculos_complementares = '[Aguardando geração...]';
 
-  // Salva no banco com TODOS os campos
   db.prepare(`
     INSERT OR REPLACE INTO ${tabela}
     (data, versiculo_referencia, versiculo_texto, reflexao, pratica, tema, meditacao_guiada, conversa, oracao, acao, versiculos_complementares)
@@ -97,7 +92,7 @@ CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo
     devocional.versiculo_referencia,
     devocional.versiculo_texto,
     devocional.reflexao,
-    devocional.reflexao, // pratica recebe a reflexão como fallback
+    devocional.reflexao,
     devocional.tema,
     devocional.meditacao_guiada,
     devocional.conversa,
@@ -122,12 +117,10 @@ async function gerarDevocional(data, tipo = 'geral') {
   };
   const tabela = tabelaMap[tipo] || 'devocionais';
 
-  // Para casal, usa função específica com formato completo
   if (tipo === 'casal') {
     return await gerarDevocionalCasal(dataStr);
   }
 
-  // Verifica se já existe
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
   if (existente) {
     console.log(`Devocional ${tipo} para ${dataStr} já existe.`);
@@ -136,7 +129,6 @@ async function gerarDevocional(data, tipo = 'geral') {
 
   console.log(`Gerando devocional ${tipo} para ${dataStr}...`);
 
-  // Busca versículos recentes para evitar repetição
   const recentes = db.prepare(`SELECT versiculo_referencia FROM ${tabela} ORDER BY data DESC LIMIT 30`).all();
   const versiculosUsados = recentes.map(r => r.versiculo_referencia).join(', ');
   const avisoRepeticao = versiculosUsados
@@ -154,7 +146,7 @@ CORAGEM ESPIRITUAL (Josué 1:9, 2 Timóteo 1:7): Força para encarar dificuldade
 PATERNIDADE PIEDOSA (Deuteronômio 6:6-9): Como ser presença ativa na vida dos filhos, ensinando fé pelo exemplo e diálogo.
 RELACIONAMENTO COM DEUS (Salmo 42:1): Sede do coração de um homem por comunhão genuína com Deus, não apenas religiosidade.
 
-Fale como quem entende os desafios específicos do homem moderno: pressão para prover, dúvidas sobre liderança, luta contra vícios, medo de falhar como pai. Seja profundo mas objetivo. Não seja piegas.`,
+Fale como quem entende os desafios específicos do homem moderno: pressão para prover, dúvidas sobre liderança, luta contra vícios, medo de falhar como pai. Seja profundo mas objetivo. Não seja piega.`,
     'ela': `Este devocional é especificamente para MULHERES cristãs. Use linguagem que reconheça sua força, dignidade e chamado único focado em:
 
 BELEZA INCORRUPTÍVEL (1 Pedro 3:3-4): Sua verdadeira beleza vem de um espírito gentil e tranquilo, não de aparência externa. Você é valiosa não por como parece.
@@ -166,28 +158,16 @@ CORAGEM E FÉ (Ester, Débora, Maria): Mulheres da Bíblia que foram corajosas, 
 COMUNIDADE E RELACIONAMENTOS (Provérbios 27:12): Seu papel em apoiar outras mulheres, construir amizades profundas, e ser força na comunidade.
 
 Fale como quem entende: pressão por perfeição, crítica do próprio corpo, dúvida de seu valor, culpa de mãe, medo de não ser "o suficiente". Seja empoderador mas honesto.`,
-    'casal': `Este devocional é para CASAIS cristãos crescendo juntos na fé. Crie devocionais que precisam de diálogo, reflexão compartilhada e prática conjunta focado em:
-
-AMOR SACRIFICIAL (Efésios 5:25-33): O homem amando como Cristo amou; sacrifício mútuo; entrega genuína um ao outro.
-SUBMISSÃO MÚTUA (Efésios 5:21-24): Não é dominação — é submissão MÚTUA por amor, onde ambos servem ao outro.
-UNIDADE (Mateus 19:6): Dois se tornam um — não perdem identidade, mas constroem uma vida juntos onde Deus é o centro.
-COMUNICAÇÃO VULNERÁVEL (Efésios 4:2-3): Falar verdade com amor, ouvir sem defender, discordar sem desprezar.
-PERDÃO E RECONCILIAÇÃO (Colossenses 3:12-14): Como lidar com feridas, mágoas, decepções e escolher graça repetidamente.
-INTIMIDADE ESPIRITUAL (1 Pedro 3:7): Orar juntos, crescer juntos, conhecer a alma do outro além do corpo.
-CONSTRUÇÃO DO LAR (Provérbios 14:1): Como criar um lar que reflete Cristo, que nutre filhos, que é refúgio.
-PACIÊNCIA E TOLERÂNCIA (1 Coríntios 13:4): Suportar um ao outro em amor, escolher paciência quando é difícil.
-
-Estruture de forma que CONVIDE ao diálogo: perguntas para conversa, meditação lado a lado, orações compartilhadas, ações práticas juntos. Um casal que ora e refllete junto cresce junto.`
   };
   const contexto = contextoMap[tipo] || 'Este devocional é para todos os membros da igreja.';
 
-  const prompt = `Você é um pastor evangélico brasileiro criando um devocional diário. ${contexto}
-
-Gere um devocional PROFUNDO E ESPECÍFICO para hoje (${dataStr}) com:
+  const prompt = `Você é um pastor evangélico brasileiro criando um devocional PROFUNDO E ESPECÍFICO para hoje (${dataStr}) com:
 1. Um versículo bíblico altamente relevante (escolha com cuidado — não use o mesmo repetidamente)
 2. Uma reflexão que reconheça as lutas REAIS dessa audiência (3-4 frases, desafiadora e esperançosa)
 3. Uma prática/aplicação CONCRETA e ESPECÍFICA para hoje (algo que essa pessoa possa fazer nas próximas horas)
 4. Um tema principal (2-3 palavras)
+
+${contexto}
 
 Responda APENAS com JSON válido neste formato exato:
 {
@@ -206,30 +186,23 @@ Importante:
 - Escolha versículos que se conectam PROFUNDAMENTE com o tema, não superficialmente.
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
-  const apiKeyStr = process.env.GEMINI_API_KEY;
-  if (!apiKeyStr) throw new Error('GEMINI_API_KEY não está configurada');
-
-  const fetchResp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKeyStr, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-    }),
+  const message = await anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 2048,
+    messages: [
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
   });
 
-  if (!fetchResp.ok) {
-    const err = await fetchResp.json();
-    throw new Error('Erro da API Gemini: ' + (err.error?.message || fetchResp.statusText));
-  }
-
-  const res = await fetchResp.json();
-  const content = res.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const content = message.content[0]?.type === 'text' ? message.content[0].text : '';
 
   if (!content) {
-    throw new Error('API retornou resposta vazia');
+    throw new Error('Claude não retornou resposta');
   }
 
-  // Extrai o JSON da resposta
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     throw new Error('Resposta inválida da API: ' + content);
@@ -237,7 +210,6 @@ Importante:
 
   const devocional = JSON.parse(jsonMatch[0]);
 
-  // Salva no banco
   db.prepare(`
     INSERT OR REPLACE INTO ${tabela} (data, versiculo_referencia, versiculo_texto, reflexao, pratica, tema)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -247,10 +219,9 @@ Importante:
   return devocional;
 }
 
-// Executar se chamado diretamente
 if (require.main === module) {
-  const data = process.argv[2]; // opcional: node generate.js 2026-04-16
-  const tipo = process.argv[3] || 'geral'; // opcional: node generate.js 2026-04-16 hfc
+  const data = process.argv[2];
+  const tipo = process.argv[3] || 'geral';
   gerarDevocional(data, tipo)
     .then(() => process.exit(0))
     .catch((err) => {
