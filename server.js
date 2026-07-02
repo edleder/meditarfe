@@ -294,7 +294,8 @@ app.get('/api/qrcode/curso/:id', async (req, res) => {
 
 // ── Devocionais Admin ──
 app.get('/api/admin/devocionais', auth, (req, res) => {
-  const tabela = req.query.tipo === 'hfc' ? 'devocionais_hfc' : 'devocionais';
+  const tabelaMap = { 'hfc': 'devocionais_hfc', 'ele': 'devocionais_ele', 'ela': 'devocionais_ela', 'casal': 'devocionais_casal' };
+  const tabela = tabelaMap[req.query.tipo] || 'devocionais';
   const p = parseInt(req.query.pagina) || 1;
   const total = db.prepare(`SELECT COUNT(*) as n FROM ${tabela}`).get().n;
   const items = db.prepare(`SELECT * FROM ${tabela} ORDER BY data DESC LIMIT 20 OFFSET ?`).all((p - 1) * 20);
@@ -305,14 +306,16 @@ app.post('/api/admin/devocional', auth, (req, res) => {
   const { data, versiculo_referencia, versiculo_texto, reflexao, pratica, tema, youtube_id, tipo } = req.body;
   if (!data || !versiculo_referencia || !versiculo_texto || !reflexao || !pratica)
     return res.status(400).json({ error: 'Campos obrigatórios faltando' });
-  const tabela = tipo === 'hfc' ? 'devocionais_hfc' : 'devocionais';
+  const tabelaMap = { 'hfc': 'devocionais_hfc', 'ele': 'devocionais_ele', 'ela': 'devocionais_ela', 'casal': 'devocionais_casal' };
+  const tabela = tabelaMap[tipo] || 'devocionais';
   db.prepare(`INSERT OR REPLACE INTO ${tabela} (data,versiculo_referencia,versiculo_texto,reflexao,pratica,tema,youtube_id) VALUES (?,?,?,?,?,?,?)`)
     .run(data, versiculo_referencia, versiculo_texto, reflexao, pratica, tema||'', youtube_id||null);
   res.json({ sucesso: true });
 });
 
 app.delete('/api/admin/devocional/:data', auth, (req, res) => {
-  const tabela = req.query.tipo === 'hfc' ? 'devocionais_hfc' : 'devocionais';
+  const tabelaMap = { 'hfc': 'devocionais_hfc', 'ele': 'devocionais_ele', 'ela': 'devocionais_ela', 'casal': 'devocionais_casal' };
+  const tabela = tabelaMap[req.query.tipo] || 'devocionais';
   db.prepare(`DELETE FROM ${tabela} WHERE data = ?`).run(req.params.data);
   res.json({ sucesso: true });
 });
@@ -508,6 +511,9 @@ app.get('/api/admin/dashboard', auth, (req, res) => {
   res.json({
     devocionais_geral: db.prepare("SELECT COUNT(*) as n FROM devocionais").get().n,
     devocionais_hfc:   db.prepare("SELECT COUNT(*) as n FROM devocionais_hfc").get().n,
+    devocionais_ele:   db.prepare("SELECT COUNT(*) as n FROM devocionais_ele").get().n,
+    devocionais_ela:   db.prepare("SELECT COUNT(*) as n FROM devocionais_ela").get().n,
+    devocionais_casal: db.prepare("SELECT COUNT(*) as n FROM devocionais_casal").get().n,
     eventos_ativos:    db.prepare("SELECT COUNT(*) as n FROM eventos WHERE ativo=1").get().n,
     anuncios_ativos:   db.prepare("SELECT COUNT(*) as n FROM anuncios WHERE ativo=1 AND data_inicio<=? AND (data_fim IS NULL OR data_fim>=?)").get(hoje,hoje).n,
     usuarios_ativos:   db.prepare("SELECT COUNT(*) as n FROM usuarios WHERE ativo=1").get().n,
