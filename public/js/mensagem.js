@@ -127,6 +127,49 @@ function renderizarDevocional(d) {
   document.getElementById('videoDate').textContent = formatarDataBR(d.data);
   document.getElementById('videoRef').textContent  = d.versiculo_referencia;
 
+  // Mostra/esconde campos adicionais (meditacao, conversa, oracao, acao, versiculos)
+  const secoes = ['meditacao-section', 'conversa-section', 'oracao-section', 'acao-section', 'versiculos-section'];
+  secoes.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+
+  if (d.meditacao_guiada) {
+    const el = document.getElementById('meditacao-section');
+    if (el) {
+      document.getElementById('meditacao-conteudo').textContent = d.meditacao_guiada;
+      el.classList.remove('hidden');
+    }
+  }
+  if (d.conversa) {
+    const el = document.getElementById('conversa-section');
+    if (el) {
+      document.getElementById('conversa-conteudo').textContent = d.conversa;
+      el.classList.remove('hidden');
+    }
+  }
+  if (d.oracao) {
+    const el = document.getElementById('oracao-section');
+    if (el) {
+      document.getElementById('oracao-conteudo').textContent = d.oracao;
+      el.classList.remove('hidden');
+    }
+  }
+  if (d.acao) {
+    const el = document.getElementById('acao-section');
+    if (el) {
+      document.getElementById('acao-conteudo').textContent = d.acao;
+      el.classList.remove('hidden');
+    }
+  }
+  if (d.versiculos_complementares) {
+    const el = document.getElementById('versiculos-section');
+    if (el) {
+      document.getElementById('versiculos-conteudo').textContent = d.versiculos_complementares;
+      el.classList.remove('hidden');
+    }
+  }
+
   // Mostra/esconde só a seção de vídeo dentro do slide (não o slide inteiro)
   const videoSection = document.getElementById('videoSection');
   const player       = document.getElementById('youtubePlayer');
