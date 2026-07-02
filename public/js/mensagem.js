@@ -125,9 +125,9 @@ async function carregarDevocional(data) {
 
 function renderizarDevocional(d) {
   console.log('[renderizarDevocional] iniciando...');
-  try {
-    const el = (id) => document.getElementById(id);
+  const el = (id) => document.getElementById(id);
 
+  try {
     if (el('cardDate')) el('cardDate').textContent = formatarDataBR(d.data);
     if (el('versiculoRef')) el('versiculoRef').textContent = d.versiculo_referencia;
     if (el('versiculoTexto')) typewriter(el('versiculoTexto'), d.versiculo_texto);
