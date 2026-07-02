@@ -56,7 +56,7 @@ IMPORTANTE:
 - Varie temas: paciência, perdão, intimidade, comunicação, amor sacrificial, unidade, liderança, submissão${avisoRepeticao}`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-1.5-flash',
     contents: prompt,
   });
   const content = response.text.trim();
@@ -188,7 +188,7 @@ Importante:
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-1.5-flash',
     contents: prompt,
   });
   const content = response.text.trim();
