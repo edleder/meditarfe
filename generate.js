@@ -21,39 +21,33 @@ async function gerarDevocionalCasal(dataStr) {
   const versiculosUsados = recentes.map(r => r.versiculo_referencia).join(', ');
   const avisoRepeticao = versiculosUsados ? `\n\nVERSÍCULOS JÁ USADOS (NÃO repita): ${versiculosUsados}` : '';
 
-  const prompt = `Você é um pastor evangélico brasileiro criando um devocional COMPLETO e PROFUNDO para casais cristãos.
+  const prompt = `VOCÊ ESTÁ CRIANDO UM DEVOCIONAL PARA CASAIS. GERE COM TODOS OS CAMPOS OBRIGATÓRIOS.
 
-GERE UM DEVOCIONAL PARA CASAL NESTE FORMATO EXATO - com TODAS as 7 seções:
+ESTRUTURA OBRIGATÓRIA (TODOS os 7 campos devem estar preenchidos):
 
-Tema: [Um tema profundo sobre relacionamento cristão]
-Passagem do Dia: [Versículo - escolha com cuidado]
-Reflexão: [Reflexão honesta, 4-5 frases, abordando desafios reais dos casais, não genérica]
-Meditação Guiada: [4 pontos de meditação que eles fazem LADO A LADO]
-Conversa entre Vocês: [3 perguntas vulneráveis e específicas para o casal responder]
-Oração Compartilhada: [Oração para rezar de mãos dadas, personalizada ao tema]
-Ação do Dia: [2-3 ações práticas e específicas para fazer JUNTOS hoje]
-Versículos Complementares: [4-5 versículos com temas relacionados]
+1. TEMA: Um título profundo (3-4 palavras)
+2. VERSÍCULO: Um versículo bíblico (formato: Livro capítulo:versículo)
+3. REFLEXÃO: 4-5 frases honestas sobre casamento
+4. MEDITAÇÃO GUIADA: 4 pontos com "•" para casal fazer junto
+5. CONVERSA: 3 perguntas para o casal se fazer (com "1. 2. 3.")
+6. ORAÇÃO: Uma oração de mãos dadas (com [nome] personalizável)
+7. AÇÃO DO DIA: 2-3 ações práticas com "•"
+8. VERSÍCULOS: 4-5 versículos (formato: • Livro capítulo:versículo — Tema)
 
-Responda APENAS com JSON válido neste formato:
+RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 {
-  "versiculo_referencia": "Livro capítulo:versículo",
-  "versiculo_texto": "Texto completo",
-  "reflexao": "Reflexão...",
-  "meditacao_guiada": "Sente-se...",
-  "conversa": "Façam estas perguntas...",
-  "oracao": "Orem juntos...",
-  "acao": "Escolha uma coisa...",
-  "versiculos_complementares": "• Versículo 1\\n• Versículo 2...",
-  "tema": "Tema do dia"
+  "tema": "Tema Profundo em Maiúsculas",
+  "versiculo_referencia": "Efésios 5:25",
+  "versiculo_texto": "Versículo completo em PT-BR",
+  "reflexao": "Reflexão com 4-5 frases...",
+  "meditacao_guiada": "• Ponto 1\\n• Ponto 2\\n• Ponto 3\\n• Ponto 4",
+  "conversa": "1. Pergunta sobre sentimentos?\\n2. Pergunta sobre necessidades?\\n3. Pergunta sobre futuro?",
+  "oracao": "Pai celeste,\\nTexto da oração...\\nAmém.",
+  "acao": "• Ação 1\\n• Ação 2\\n• Ação 3",
+  "versiculos_complementares": "• Romanos 12:12 — Paciência\\n• 1 Coríntios 13:4 — Amor\\n• Efésios 5:21 — Submissão\\n• Colossenses 3:14 — Unidade\\n• 1 Pedro 3:7 — Respeito"
 }
 
-IMPORTANTE:
-- Seja PROFUNDO e REAL — fale sobre conflitos, perdão, intimidade, paciência, unidade
-- A meditação deve ser JUNTOS, não um para o outro
-- As perguntas devem ser VULNERÁVEIS — sobre sentimentos, necessidades, medo
-- A oração deve incluir [nome] para que cada um pense no cônjuge
-- As ações devem ser CONCRETAS — abraço, oração, conversa, silêncio juntos
-- Varie temas: paciência, perdão, intimidade, comunicação, amor sacrificial, unidade, liderança, submissão${avisoRepeticao}`;
+CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
   const response = await ai.models.generateContent({
     model: 'gemini-1.5-flash',
@@ -67,6 +61,17 @@ IMPORTANTE:
   }
 
   const devocional = JSON.parse(jsonMatch[0]);
+
+  // Garante que todos os campos obrigatórios existem
+  if (!devocional.versiculo_referencia) devocional.versiculo_referencia = 'Versículo não informado';
+  if (!devocional.versiculo_texto) devocional.versiculo_texto = 'Texto não informado';
+  if (!devocional.reflexao) devocional.reflexao = 'Reflexão não gerada';
+  if (!devocional.tema) devocional.tema = 'Sem tema';
+  if (!devocional.meditacao_guiada) devocional.meditacao_guiada = '[Aguardando geração...]';
+  if (!devocional.conversa) devocional.conversa = '[Aguardando geração...]';
+  if (!devocional.oracao) devocional.oracao = '[Aguardando geração...]';
+  if (!devocional.acao) devocional.acao = '[Aguardando geração...]';
+  if (!devocional.versiculos_complementares) devocional.versiculos_complementares = '[Aguardando geração...]';
 
   // Salva no banco com TODOS os campos
   db.prepare(`
