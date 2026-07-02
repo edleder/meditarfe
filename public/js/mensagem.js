@@ -108,6 +108,7 @@ async function carregarDevocional(data) {
 
     skeleton.classList.add('hidden');
     viewport.classList.remove('hidden');
+    console.log('[carregarDevocional] viewport visível, sucesso!');
 
     const btnProximo = document.getElementById('btnProximo');
     if (btnProximo) {
@@ -123,17 +124,23 @@ async function carregarDevocional(data) {
 }
 
 function renderizarDevocional(d) {
-  document.getElementById('cardDate').textContent      = formatarDataBR(d.data);
-  document.getElementById('versiculoRef').textContent  = d.versiculo_referencia;
-  typewriter(document.getElementById('versiculoTexto'), d.versiculo_texto);
-  document.getElementById('reflexao').textContent      = d.reflexao;
-  document.getElementById('pratica').textContent       = d.pratica;
-  document.getElementById('temaBadge').textContent     = d.tema || '';
+  console.log('[renderizarDevocional] iniciando...');
+  try {
+    document.getElementById('cardDate').textContent      = formatarDataBR(d.data);
+    document.getElementById('versiculoRef').textContent  = d.versiculo_referencia;
+    typewriter(document.getElementById('versiculoTexto'), d.versiculo_texto);
+    document.getElementById('reflexao').textContent      = d.reflexao;
+    document.getElementById('pratica').textContent       = d.pratica;
+    document.getElementById('temaBadge').textContent     = d.tema || '';
 
-  // Para casal, mostra o título do devocional
-  const titEl = document.getElementById('devocionalTitulo');
-  if (titEl) {
-    titEl.textContent = d.tema ? `"${d.tema}"` : '';
+    // Para casal, mostra o título do devocional
+    const titEl = document.getElementById('devocionalTitulo');
+    if (titEl) {
+      titEl.textContent = d.tema ? `"${d.tema}"` : '';
+    }
+    console.log('[renderizarDevocional] seções básicas OK');
+  } catch (e) {
+    console.error('[renderizarDevocional] erro:', e);
   }
 
   document.getElementById('videoDate').textContent = formatarDataBR(d.data);
