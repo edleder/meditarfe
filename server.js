@@ -86,6 +86,9 @@ app.get('/p/:codigo', (req, res) => {
 // ── Páginas públicas ──────────────────────────────────────────────────────────
 app.get('/mensagem',       (_, res) => res.sendFile(path.join(__dirname, 'public/mensagem.html')));
 app.get('/hfc',            (_, res) => res.sendFile(path.join(__dirname, 'public/hfc.html')));
+app.get('/ele',            (_, res) => res.sendFile(path.join(__dirname, 'public/ele.html')));
+app.get('/ela',            (_, res) => res.sendFile(path.join(__dirname, 'public/ela.html')));
+app.get('/casal',          (_, res) => res.sendFile(path.join(__dirname, 'public/casal.html')));
 app.get('/evento/:id',     (_, res) => res.sendFile(path.join(__dirname, 'public/inscricao.html')));
 app.get('/curso/:id',      (_, res) => res.sendFile(path.join(__dirname, 'public/inscricao.html')));
 app.get('/admin',          (_, res) => res.sendFile(path.join(__dirname, 'public/admin.html')));
@@ -109,6 +112,36 @@ app.get('/api/hfc/hoje', (_, res) => {
 });
 app.get('/api/hfc/:data', (req, res) => {
   const d = db.prepare('SELECT * FROM devocionais_hfc WHERE data = ?').get(req.params.data);
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado' });
+});
+
+// Devocionais Ele (Para Homem)
+app.get('/api/ele/hoje', (_, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_ele WHERE data = ?').get(dataHojeBR());
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado', data: dataHojeBR() });
+});
+app.get('/api/ele/:data', (req, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_ele WHERE data = ?').get(req.params.data);
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado' });
+});
+
+// Devocionais Ela (Para Mulher)
+app.get('/api/ela/hoje', (_, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_ela WHERE data = ?').get(dataHojeBR());
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado', data: dataHojeBR() });
+});
+app.get('/api/ela/:data', (req, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_ela WHERE data = ?').get(req.params.data);
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado' });
+});
+
+// Devocionais Casal
+app.get('/api/casal/hoje', (_, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_casal WHERE data = ?').get(dataHojeBR());
+  d ? res.json(d) : res.status(404).json({ error: 'Não encontrado', data: dataHojeBR() });
+});
+app.get('/api/casal/:data', (req, res) => {
+  const d = db.prepare('SELECT * FROM devocionais_casal WHERE data = ?').get(req.params.data);
   d ? res.json(d) : res.status(404).json({ error: 'Não encontrado' });
 });
 
@@ -224,6 +257,18 @@ app.get('/api/devocional/:data/links', (req, res) => {
 });
 app.get('/api/hfc/:data/links', (req, res) => {
   const items = db.prepare("SELECT * FROM devocional_links WHERE data=? AND tipo='hfc' ORDER BY ordem, created_at").all(req.params.data);
+  res.json(items);
+});
+app.get('/api/ele/:data/links', (req, res) => {
+  const items = db.prepare("SELECT * FROM devocional_links WHERE data=? AND tipo='ele' ORDER BY ordem, created_at").all(req.params.data);
+  res.json(items);
+});
+app.get('/api/ela/:data/links', (req, res) => {
+  const items = db.prepare("SELECT * FROM devocional_links WHERE data=? AND tipo='ela' ORDER BY ordem, created_at").all(req.params.data);
+  res.json(items);
+});
+app.get('/api/casal/:data/links', (req, res) => {
+  const items = db.prepare("SELECT * FROM devocional_links WHERE data=? AND tipo='casal' ORDER BY ordem, created_at").all(req.params.data);
   res.json(items);
 });
 

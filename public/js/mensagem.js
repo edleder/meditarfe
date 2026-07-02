@@ -3,7 +3,34 @@ let dataAtual       = dataHoje();
 let devocionalAtual = null;
 let paginaAtual     = 0;
 const IS_HFC        = typeof HFC_MODE !== 'undefined' && HFC_MODE;
+const IS_ELE        = typeof ELE_MODE !== 'undefined' && ELE_MODE;
+const IS_ELA        = typeof ELA_MODE !== 'undefined' && ELA_MODE;
+const IS_CASAL      = typeof CASAL_MODE !== 'undefined' && CASAL_MODE;
 let _twTimer        = null;
+
+function getApiBase() {
+  if (IS_HFC) return '/api/hfc';
+  if (IS_ELE) return '/api/ele';
+  if (IS_ELA) return '/api/ela';
+  if (IS_CASAL) return '/api/casal';
+  return '/api/devocional';
+}
+
+function getTitulo() {
+  if (IS_HFC) return 'HFC';
+  if (IS_ELE) return 'Para Homem';
+  if (IS_ELA) return 'Para Mulher';
+  if (IS_CASAL) return 'Para Casal';
+  return 'Devocional';
+}
+
+function getPaginaTag() {
+  if (IS_HFC) return 'hfc';
+  if (IS_ELE) return 'ele';
+  if (IS_ELA) return 'ela';
+  if (IS_CASAL) return 'casal';
+  return 'geral';
+}
 
 // ── Typewriter ─────────────────────────────────────────────────────────────
 function typewriter(el, text, speed = 16) {
@@ -61,7 +88,7 @@ async function carregarDevocional(data) {
   irParaDevo(false);
 
   try {
-    const base = IS_HFC ? '/api/hfc' : '/api/devocional';
+    const base = getApiBase();
     const url  = data === dataHoje() ? `${base}/hoje` : `${base}/${data}`;
 
     const res = await fetch(url);
@@ -116,7 +143,7 @@ function renderizarDevocional(d) {
   void card.offsetWidth;
   card.classList.add('card-enter');
 
-  document.title = `${d.versiculo_referencia} — ${IS_HFC ? 'HFC' : 'Devocional'}`;
+  document.title = `${d.versiculo_referencia} — ${getTitulo()}`;
 }
 
 // ── Navegação entre slides ─────────────────────────────────────────────────
@@ -176,7 +203,7 @@ async function carregarLinksDevocional() {
   const container = document.getElementById('linksDevocionalLista');
   if (!section || !container) return;
   try {
-    const base = IS_HFC ? '/api/hfc' : '/api/devocional';
+    const base = getApiBase();
     const res  = await fetch(`${base}/${dataAtual}/links`);
     const links = await res.json();
     if (!links.length) { section.classList.add('hidden'); return; }
@@ -222,7 +249,7 @@ async function carregarInscricoes() {
   const section   = document.getElementById('inscricoesSection');
   const container = document.getElementById('linksEventos');
   if (!container) return;
-  const pg = IS_HFC ? 'hfc' : 'geral';
+  const pg = getPaginaTag();
   try {
     const [resEv, resCr] = await Promise.all([
       fetch(`/api/eventos?pagina=${pg}`),

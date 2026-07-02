@@ -35,6 +35,45 @@ db.exec(`
     created_at TEXT DEFAULT (datetime('now'))
   );
 
+  -- Devocionais Ele (Para Homem)
+  CREATE TABLE IF NOT EXISTS devocionais_ele (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT UNIQUE NOT NULL,
+    versiculo_referencia TEXT NOT NULL,
+    versiculo_texto TEXT NOT NULL,
+    reflexao TEXT NOT NULL,
+    pratica TEXT NOT NULL,
+    tema TEXT,
+    youtube_id TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
+  -- Devocionais Ela (Para Mulher)
+  CREATE TABLE IF NOT EXISTS devocionais_ela (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT UNIQUE NOT NULL,
+    versiculo_referencia TEXT NOT NULL,
+    versiculo_texto TEXT NOT NULL,
+    reflexao TEXT NOT NULL,
+    pratica TEXT NOT NULL,
+    tema TEXT,
+    youtube_id TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
+  -- Devocionais Casal
+  CREATE TABLE IF NOT EXISTS devocionais_casal (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT UNIQUE NOT NULL,
+    versiculo_referencia TEXT NOT NULL,
+    versiculo_texto TEXT NOT NULL,
+    reflexao TEXT NOT NULL,
+    pratica TEXT NOT NULL,
+    tema TEXT,
+    youtube_id TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
   -- Anúncios
   CREATE TABLE IF NOT EXISTS anuncios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -247,6 +286,9 @@ const rowPuls = db.prepare("SELECT COUNT(*) as n FROM pulseiras").get();
 if (rowPuls.n === 0) {
   db.prepare("INSERT INTO pulseiras (codigo,nome,descricao,url_destino) VALUES (?,?,?,?)").run('geral','Devocional Geral','Pulseira padrão da congregação','/mensagem');
   db.prepare("INSERT INTO pulseiras (codigo,nome,descricao,url_destino) VALUES (?,?,?,?)").run('hfc','HFC — Homens Fortes e Corajosos','Pulseira do grupo HFC','/hfc');
+  db.prepare("INSERT INTO pulseiras (codigo,nome,descricao,url_destino) VALUES (?,?,?,?)").run('ele','Devocional Para Homem','Pulseira para homens','/ele');
+  db.prepare("INSERT INTO pulseiras (codigo,nome,descricao,url_destino) VALUES (?,?,?,?)").run('ela','Devocional Para Mulher','Pulseira para mulheres','/ela');
+  db.prepare("INSERT INTO pulseiras (codigo,nome,descricao,url_destino) VALUES (?,?,?,?)").run('casal','Devocional Para Casal','Pulseira para casais','/casal');
 }
 
 // Seed superadmin inicial
