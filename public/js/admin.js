@@ -331,15 +331,28 @@ async function gerarComIA() {
     const json = await r.json();
     if (!r.ok) throw new Error(json.error);
     const d = json.devocional;
-    res.innerHTML = `
-      <h3>Gerado:</h3>
+    const tipo = document.getElementById('gTipo').value;
+    let conteudo = `
+      <h3>Gerado: "${d.tema || 'Sem título'}"</h3>
       <div class="ref">${d.versiculo_referencia}</div>
       <div class="quote">"${d.versiculo_texto}"</div>
-      <div class="lbl">Reflexão</div><div class="body">${d.reflexao}</div>
-      <div class="lbl">Prática</div><div class="body">${d.pratica}</div>
-      <div class="ia-ok">✅ Salvo com sucesso!</div>`;
+      <div class="lbl">Reflexão</div><div class="body">${d.reflexao}</div>`;
+
+    if (tipo === 'casal') {
+      conteudo += `
+      <div class="lbl">Meditação Guiada</div><div class="body" style="font-size:0.9em">${d.meditacao_guiada || '—'}</div>
+      <div class="lbl">Conversa</div><div class="body" style="font-size:0.9em">${d.conversa || '—'}</div>
+      <div class="lbl">Oração</div><div class="body" style="font-size:0.9em">${d.oracao || '—'}</div>
+      <div class="lbl">Ação do Dia</div><div class="body" style="font-size:0.9em">${d.acao || '—'}</div>
+      <div class="lbl">Versículos</div><div class="body" style="font-size:0.9em">${d.versiculos_complementares || '—'}</div>`;
+    } else {
+      conteudo += `<div class="lbl">Prática</div><div class="body">${d.pratica}</div>`;
+    }
+
+    conteudo += `<div class="ia-ok">✅ Salvo com sucesso!</div>`;
+    res.innerHTML = conteudo;
     res.classList.remove('hidden');
-    carregarDevocionais(document.getElementById('gTipo').value);
+    carregarDevocionais(tipo);
   } catch(err) {
     erro.textContent = 'Erro: ' + err.message; erro.classList.remove('hidden');
   } finally { btn.disabled = false; btn.textContent = '🤖 Gerar Devocional'; }
