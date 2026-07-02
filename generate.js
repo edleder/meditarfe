@@ -1,8 +1,5 @@
 require('dotenv').config();
-const { GoogleGenAI } = require('@google/genai');
 const db = require('./database');
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function gerarDevocionalCasal(dataStr) {
   const tabela = 'devocionais_casal';
@@ -49,11 +46,28 @@ RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 
 CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-pro-vision',
-    contents: [{ text: prompt }],
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY não está configurada');
+
+  const fetchResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKey, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+    }),
   });
-  const content = response.text.trim();
+
+  if (!fetchResponse.ok) {
+    const error = await fetchResponse.json();
+    throw new Error('Erro da API Gemini: ' + (error.error?.message || fetchResponse.statusText));
+  }
+
+  const result = await fetchResponse.json();
+  const content = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  if (!content) {
+    throw new Error('API retornou resposta vazia');
+  }
 
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
@@ -192,11 +206,28 @@ Importante:
 - Escolha versículos que se conectam PROFUNDAMENTE com o tema, não superficialmente.
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-pro-vision',
-    contents: [{ text: prompt }],
+  const apiKeyStr = process.env.GEMINI_API_KEY;
+  if (!apiKeyStr) throw new Error('GEMINI_API_KEY não está configurada');
+
+  const fetchResp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKeyStr, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+    }),
   });
-  const content = response.text.trim();
+
+  if (!fetchResp.ok) {
+    const err = await fetchResp.json();
+    throw new Error('Erro da API Gemini: ' + (err.error?.message || fetchResp.statusText));
+  }
+
+  const res = await fetchResp.json();
+  const content = res.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  if (!content) {
+    throw new Error('API retornou resposta vazia');
+  }
 
   // Extrai o JSON da resposta
   const jsonMatch = content.match(/\{[\s\S]*\}/);
