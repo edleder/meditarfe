@@ -1,10 +1,43 @@
 require('dotenv').config();
-const Anthropic = require('@anthropic-ai/sdk');
 const db = require('./database');
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+async function chamarGroq(prompt) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY não está configurada');
+
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'mixtral-8x7b-32768',
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 2048,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error('Erro da API Groq: ' + (error.error?.message || response.statusText));
+  }
+
+  const result = await response.json();
+  const content = result.choices?.[0]?.message?.content || '';
+
+  if (!content) {
+    throw new Error('Groq retornou resposta vazia');
+  }
+
+  return content;
+}
 
 async function gerarDevocionalCasal(dataStr) {
   const tabela = 'devocionais_casal';
@@ -49,22 +82,7 @@ RESPONDA UNICAMENTE COM ESTE JSON (sem markdown, sem explicações):
 
 CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo vazio ou com null.${avisoRepeticao}`;
 
-  const message = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
-    max_tokens: 2048,
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-  });
-
-  const content = message.content[0]?.type === 'text' ? message.content[0].text : '';
-
-  if (!content) {
-    throw new Error('Claude não retornou resposta');
-  }
+  const content = await chamarGroq(prompt);
 
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
@@ -186,22 +204,7 @@ Importante:
 - Escolha versículos que se conectam PROFUNDAMENTE com o tema, não superficialmente.
 - Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
 
-  const message = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
-    max_tokens: 2048,
-    messages: [
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-  });
-
-  const content = message.content[0]?.type === 'text' ? message.content[0].text : '';
-
-  if (!content) {
-    throw new Error('Claude não retornou resposta');
-  }
+  const content = await chamarGroq(prompt);
 
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
