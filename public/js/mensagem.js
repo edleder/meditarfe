@@ -126,66 +126,72 @@ async function carregarDevocional(data) {
 function renderizarDevocional(d) {
   console.log('[renderizarDevocional] iniciando...');
   try {
-    document.getElementById('cardDate').textContent      = formatarDataBR(d.data);
-    document.getElementById('versiculoRef').textContent  = d.versiculo_referencia;
-    typewriter(document.getElementById('versiculoTexto'), d.versiculo_texto);
-    document.getElementById('reflexao').textContent      = d.reflexao;
-    document.getElementById('pratica').textContent       = d.pratica;
-    document.getElementById('temaBadge').textContent     = d.tema || '';
+    const el = (id) => document.getElementById(id);
+
+    if (el('cardDate')) el('cardDate').textContent = formatarDataBR(d.data);
+    if (el('versiculoRef')) el('versiculoRef').textContent = d.versiculo_referencia;
+    if (el('versiculoTexto')) typewriter(el('versiculoTexto'), d.versiculo_texto);
+    if (el('reflexao')) el('reflexao').textContent = d.reflexao;
+    if (el('pratica')) el('pratica').textContent = d.pratica;
+    if (el('temaBadge')) el('temaBadge').textContent = d.tema || '';
 
     // Para casal, mostra o título do devocional
-    const titEl = document.getElementById('devocionalTitulo');
-    if (titEl) {
-      titEl.textContent = d.tema ? `"${d.tema}"` : '';
+    if (el('devocionalTitulo')) {
+      el('devocionalTitulo').textContent = d.tema ? `"${d.tema}"` : '';
     }
     console.log('[renderizarDevocional] seções básicas OK');
   } catch (e) {
     console.error('[renderizarDevocional] erro:', e);
   }
 
-  document.getElementById('videoDate').textContent = formatarDataBR(d.data);
-  document.getElementById('videoRef').textContent  = d.versiculo_referencia;
+  if (el('videoDate')) el('videoDate').textContent = formatarDataBR(d.data);
+  if (el('videoRef')) el('videoRef').textContent = d.versiculo_referencia;
 
   // Mostra/esconde campos adicionais (meditacao, conversa, oracao, acao, versiculos, notas)
   const secoes = ['meditacao-section', 'conversa-section', 'oracao-section', 'acao-section', 'versiculos-section', 'notas-section'];
   secoes.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
+    const section = document.getElementById(id);
+    if (section) section.classList.add('hidden');
   });
 
   if (d.meditacao_guiada) {
-    const el = document.getElementById('meditacao-section');
-    if (el) {
-      document.getElementById('meditacao-conteudo').textContent = d.meditacao_guiada;
-      el.classList.remove('hidden');
+    const section = document.getElementById('meditacao-section');
+    if (section) {
+      const conteudo = document.getElementById('meditacao-conteudo');
+      if (conteudo) conteudo.textContent = d.meditacao_guiada;
+      section.classList.remove('hidden');
     }
   }
   if (d.conversa) {
-    const el = document.getElementById('conversa-section');
-    if (el) {
-      document.getElementById('conversa-conteudo').textContent = d.conversa;
-      el.classList.remove('hidden');
+    const section = document.getElementById('conversa-section');
+    if (section) {
+      const conteudo = document.getElementById('conversa-conteudo');
+      if (conteudo) conteudo.textContent = d.conversa;
+      section.classList.remove('hidden');
     }
   }
   if (d.oracao) {
-    const el = document.getElementById('oracao-section');
-    if (el) {
-      document.getElementById('oracao-conteudo').textContent = d.oracao;
-      el.classList.remove('hidden');
+    const section = document.getElementById('oracao-section');
+    if (section) {
+      const conteudo = document.getElementById('oracao-conteudo');
+      if (conteudo) conteudo.textContent = d.oracao;
+      section.classList.remove('hidden');
     }
   }
   if (d.acao) {
-    const el = document.getElementById('acao-section');
-    if (el) {
-      document.getElementById('acao-conteudo').textContent = d.acao;
-      el.classList.remove('hidden');
+    const section = document.getElementById('acao-section');
+    if (section) {
+      const conteudo = document.getElementById('acao-conteudo');
+      if (conteudo) conteudo.textContent = d.acao;
+      section.classList.remove('hidden');
     }
   }
   if (d.versiculos_complementares) {
-    const el = document.getElementById('versiculos-section');
-    if (el) {
-      document.getElementById('versiculos-conteudo').textContent = d.versiculos_complementares;
-      el.classList.remove('hidden');
+    const section = document.getElementById('versiculos-section');
+    if (section) {
+      const conteudo = document.getElementById('versiculos-conteudo');
+      if (conteudo) conteudo.textContent = d.versiculos_complementares;
+      section.classList.remove('hidden');
     }
   }
 
@@ -203,20 +209,26 @@ function renderizarDevocional(d) {
   // Mostra/esconde só a seção de vídeo dentro do slide (não o slide inteiro)
   const videoSection = document.getElementById('videoSection');
   const player       = document.getElementById('youtubePlayer');
-  if (d.youtube_id) {
-    player.src = `https://www.youtube.com/embed/${d.youtube_id}`;
-    videoSection.classList.remove('hidden');
-  } else {
-    player.src = '';
-    videoSection.classList.add('hidden');
+  if (videoSection && player) {
+    if (d.youtube_id) {
+      player.src = `https://www.youtube.com/embed/${d.youtube_id}`;
+      videoSection.classList.remove('hidden');
+    } else {
+      player.src = '';
+      videoSection.classList.add('hidden');
+    }
   }
 
   const card = document.getElementById('devocionalCard');
-  card.classList.remove('card-enter');
-  void card.offsetWidth;
-  card.classList.add('card-enter');
+  if (card) {
+    card.classList.remove('card-enter');
+    void card.offsetWidth;
+    card.classList.add('card-enter');
+  }
 
-  document.title = `${d.versiculo_referencia} — ${getTitulo()}`;
+  if (d.versiculo_referencia) {
+    document.title = `${d.versiculo_referencia} — ${getTitulo()}`;
+  }
 }
 
 // ── Navegação entre slides ─────────────────────────────────────────────────
