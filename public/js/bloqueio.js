@@ -57,33 +57,56 @@ function bloqueiaAcesso() {
 }
 
 // ── Ativa assinatura (chamado pela Hotmart após pagamento) ──────────────────
-function ativarAssinatura(duracao) {
-  const agora = new Date();
-  let expiracao = new Date(agora);
+async function ativarAssinatura(duracao, email) {
+  try {
+    // Chama webhook para registrar no servidor
+    const response = await fetch('/api/webhook/hotmart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email || 'usuario@example.com',
+        plano: duracao
+      })
+    });
 
-  // duracao pode ser: '1mes', '3meses', '6meses', '1ano'
-  switch(duracao) {
-    case '1mes':
-      expiracao.setMonth(expiracao.getMonth() + 1);
-      break;
-    case '3meses':
-      expiracao.setMonth(expiracao.getMonth() + 3);
-      break;
-    case '6meses':
-      expiracao.setMonth(expiracao.getMonth() + 6);
-      break;
-    case '1ano':
-      expiracao.setFullYear(expiracao.getFullYear() + 1);
-      break;
-    default:
-      expiracao.setMonth(expiracao.getMonth() + 1);
+    const dados = await response.json();
+
+    if (dados.sucesso && dados.token) {
+      // Guarda o token no localStorage
+      const agora = new Date();
+      let expiracao = new Date(agora);
+
+      // duracao pode ser: '1mes', '3meses', '6meses', '1ano'
+      switch(duracao) {
+        case '3meses':
+          expiracao.setMonth(expiracao.getMonth() + 3);
+          break;
+        case '6meses':
+          expiracao.setMonth(expiracao.getMonth() + 6);
+          break;
+        case '1ano':
+          expiracao.setFullYear(expiracao.getFullYear() + 1);
+          break;
+        case '1mes':
+        default:
+          expiracao.setMonth(expiracao.getMonth() + 1);
+      }
+
+      localStorage.setItem('assinatura_token', dados.token);
+      localStorage.setItem('assinatura_expira', expiracao.toISOString());
+
+      console.log('✅ Assinatura ativada até:', expiracao);
+      return true;
+    } else {
+      console.error('❌ Erro ao ativar assinatura:', dados);
+      return false;
+    }
+  } catch (e) {
+    console.error('❌ Erro ao chamar webhook:', e);
+    return false;
   }
-
-  // Guarda no localStorage
-  localStorage.setItem('assinatura_token', 'valid-' + Date.now());
-  localStorage.setItem('assinatura_expira', expiracao.toISOString());
-
-  console.log('✅ Assinatura ativada até:', expiracao);
 }
 
 // ── Cancela assinatura ───────────────────────────────────────────────────────
