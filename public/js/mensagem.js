@@ -487,10 +487,13 @@ if (window.location.pathname.includes('/casal')) {
 setTimeout(() => {
   const audio = document.getElementById('musicaFundo');
   if (audio) {
-    audio.play().catch(e => console.log('Autoplay bloqueado pelo navegador'));
-    // Atualiza ícone para pause
-    document.getElementById('iconPlay').classList.add('hidden');
-    document.getElementById('iconPause').classList.remove('hidden');
+    audio.play().then(() => {
+      // Remove muted depois que começa a tocar (funciona em mobile)
+      audio.muted = false;
+      // Atualiza ícone para pause
+      document.getElementById('iconPlay').classList.add('hidden');
+      document.getElementById('iconPause').classList.remove('hidden');
+    }).catch(e => console.log('Autoplay bloqueado pelo navegador'));
   }
 }, 500);
 
