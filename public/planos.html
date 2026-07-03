@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planos - Juntos na Fé</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --dark: #1a1a1a;
+      --gold: #c9a96e;
+      --light: #f5f5f5;
+      --text: #333;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2em 1em;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 4em;
+      padding: 2em 0;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5em;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3em;
+      color: var(--gold);
+      margin-bottom: 0.5em;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1.2em;
+      color: #999;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Plans Grid */
+    .planos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2em;
+      margin: 3em 0;
+    }
+
+    .plano-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5em;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .plano-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(201, 169, 110, 0.2);
+    }
+
+    .plano-card.destaque {
+      border: 2px solid var(--gold);
+      transform: scale(1.05);
+    }
+
+    .plano-card.destaque:hover {
+      transform: scale(1.05) translateY(-8px);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 0.5em 1em;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-bottom: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .plano-duracao {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8em;
+      color: var(--text);
+      margin-bottom: 0.5em;
+      font-weight: 600;
+    }
+
+    .plano-descricao {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 1.5em;
+      line-height: 1.6;
+    }
+
+    .preco {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5em;
+      color: var(--gold);
+      margin: 1em 0;
+      font-weight: 600;
+    }
+
+    .preco-mes {
+      font-size: 0.9em;
+      color: #999;
+      font-family: 'Inter', sans-serif;
+      display: block;
+      margin-top: 0.5em;
+    }
+
+    .beneficios {
+      list-style: none;
+      margin: 1.5em 0;
+      text-align: left;
+      font-size: 0.95em;
+    }
+
+    .beneficios li {
+      padding: 0.6em 0;
+      color: #666;
+      border-bottom: 1px solid #eee;
+    }
+
+    .beneficios li:before {
+      content: "✓ ";
+      color: var(--gold);
+      font-weight: 600;
+      margin-right: 0.5em;
+    }
+
+    .beneficios li:last-child {
+      border-bottom: none;
+    }
+
+    .btn-comprar {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 1em 2em;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1em;
+      margin-top: 1.5em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-comprar:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 4em;
+      padding-top: 2em;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    footer p {
+      margin: 0.5em 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .plano-card.destaque {
+        transform: scale(1);
+      }
+
+      .plano-card.destaque:hover {
+        transform: translateY(-8px);
+      }
+
+      .planos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .preco {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <img src="/img/logo-casal.png" alt="Juntos na Fé" class="logo" />
+      <h1>Escolha seu Plano</h1>
+      <p>Acesso ao devocional exclusivo Juntos na Fé com reflexões, meditações e orações diárias para fortalecer sua fé e relacionamento</p>
+    </header>
+
+    <!-- Plans Grid -->
+    <div class="planos-grid">
+      <!-- Plano 1 Mês -->
+      <div class="plano-card">
+        <div class="badge">1 Mês</div>
+        <div class="plano-duracao">Acesso por 1 Mês</div>
+        <div class="plano-descricao">Explore nosso conteúdo espiritual exclusivo</div>
+        <div class="preco">
+          R$ 19,90
+          <span class="preco-mes">por mês</span>
+        </div>
+        <ul class="beneficios">
+          <li>Devocional diário</li>
+          <li>Meditações guiadas</li>
+          <li>Áudio relaxante</li>
+          <li>Acesso total</li>
+        </ul>
+        <a href="https://pay.hotmart.com/I106596479E?off=qzx7bsol&bid=1783113662832" class="btn-comprar">Comprar Agora</a>
+      </div>
+
+      <!-- Plano 3 Meses -->
+      <div class="plano-card">
+        <div class="badge">3 Meses</div>
+        <div class="plano-duracao">Acesso por 3 Meses</div>
+        <div class="plano-descricao">Melhor valor - Economize 16%</div>
+        <div class="preco">
+          R$ 49,90
+          <span class="preco-mes">R$ 16,63/mês</span>
+        </div>
+        <ul class="beneficios">
+          <li>Devocional diário</li>
+          <li>Meditações guiadas</li>
+          <li>Áudio relaxante</li>
+          <li>Acesso total</li>
+        </ul>
+        <a href="https://pay.hotmart.com/I106596479E?off=59xcrcku&bid=1783113676093" class="btn-comprar">Comprar Agora</a>
+      </div>
+
+      <!-- Plano 6 Meses (Destaque) -->
+      <div class="plano-card destaque">
+        <div class="badge">6 Meses</div>
+        <div class="plano-duracao">Acesso por 6 Meses</div>
+        <div class="plano-descricao">Melhor custo-benefício - Economize 25%</div>
+        <div class="preco">
+          R$ 89,90
+          <span class="preco-mes">R$ 14,98/mês</span>
+        </div>
+        <ul class="beneficios">
+          <li>Devocional diário</li>
+          <li>Meditações guiadas</li>
+          <li>Áudio relaxante</li>
+          <li>Acesso total</li>
+        </ul>
+        <a href="https://pay.hotmart.com/I106596479E?off=ynmcwoyr&bid=1783113691704" class="btn-comprar">Comprar Agora</a>
+      </div>
+
+      <!-- Plano 1 Ano -->
+      <div class="plano-card">
+        <div class="badge">1 Ano</div>
+        <div class="plano-duracao">Acesso por 1 Ano</div>
+        <div class="plano-descricao">Máxima economia - Economize 37%</div>
+        <div class="preco">
+          R$ 149,90
+          <span class="preco-mes">R$ 12,49/mês</span>
+        </div>
+        <ul class="beneficios">
+          <li>Devocional diário</li>
+          <li>Meditações guiadas</li>
+          <li>Áudio relaxante</li>
+          <li>Acesso total</li>
+        </ul>
+        <a href="https://pay.hotmart.com/I106596479E?off=zm8j1xb5&bid=1783113706541" class="btn-comprar">Comprar Agora</a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>💕 Juntos na Fé - Devocional Diário para Casais</p>
+      <p>Fortaleça sua fé e relacionamento com reflexões, meditações e orações diárias</p>
+    </footer>
+  </div>
+</body>
+</html>
