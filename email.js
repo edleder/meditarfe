@@ -25,7 +25,7 @@ function formatarData(dataIso) {
   });
 }
 
-async function enviarEmailConfirmacao(email, plano, dataExpiracao) {
+async function enviarEmailConfirmacao(email, plano, dataExpiracao, token) {
   try {
     const dataFormatada = formatarData(dataExpiracao);
     const nomeDoPlano = nomesDosPlanos[plano] || plano;
