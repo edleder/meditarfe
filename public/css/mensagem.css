@@ -551,5 +551,31 @@ body {
   text-transform: uppercase; color: var(--gold); opacity: 0.7;
 }
 
+/* ── Botão de Música ──────────────────────────────────────────────────────── */
+.btn-audio {
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.btn-audio:hover {
+  opacity: 1;
+}
+
+.btn-audio.muted {
+  opacity: 0.4;
+}
+
 /* ── Hidden ───────────────────────────────────────────────────────────────── */
 .hidden { display: none !important; }
