@@ -1,6 +1,17 @@
 require('dotenv').config();
 const db = require('./database');
 
+function registrarLogGeracao(tipo, status, mensagem = '') {
+  try {
+    db.prepare(`
+      INSERT INTO logs_geracao (tipo, status, mensagem)
+      VALUES (?, ?, ?)
+    `).run(tipo, status, mensagem);
+  } catch (e) {
+    console.error('[LOG] Erro ao registrar log de geração:', e.message);
+  }
+}
+
 async function chamarGroq(prompt) {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error('GROQ_API_KEY não está configurada');
@@ -45,6 +56,7 @@ async function gerarDevocionalCasal(dataStr) {
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
   if (existente) {
     console.log(`Devocional casal para ${dataStr} já existe.`);
+    registrarLogGeracao('casal', 'SKIPPED', `Devocional já existe para ${dataStr}`);
     return existente;
   }
 
@@ -119,6 +131,7 @@ CRÍTICO: TODOS os 8 campos devem ter conteúdo válido. NÃO deixe nenhum campo
     devocional.versiculos_complementares
   );
 
+  registrarLogGeracao('casal', 'SUCCESS', `Gerado com: ${devocional.versiculo_referencia}`);
   console.log(`Devocional casal gerado com sucesso para ${dataStr}:`, devocional.versiculo_referencia);
   return devocional;
 }
@@ -142,6 +155,7 @@ async function gerarDevocional(data, tipo = 'geral') {
   const existente = db.prepare(`SELECT * FROM ${tabela} WHERE data = ?`).get(dataStr);
   if (existente) {
     console.log(`Devocional ${tipo} para ${dataStr} já existe.`);
+    registrarLogGeracao(tipo, 'SKIPPED', `Devocional já existe para ${dataStr}`);
     return existente;
   }
 
@@ -218,6 +232,7 @@ Importante:
     VALUES (?, ?, ?, ?, ?, ?)
   `).run(dataStr, devocional.versiculo_referencia, devocional.versiculo_texto, devocional.reflexao, devocional.pratica, devocional.tema);
 
+  registrarLogGeracao(tipo, 'SUCCESS', `Gerado com: ${devocional.versiculo_referencia}`);
   console.log(`Devocional gerado com sucesso para ${dataStr}:`, devocional.versiculo_referencia);
   return devocional;
 }
@@ -229,8 +244,9 @@ if (require.main === module) {
     .then(() => process.exit(0))
     .catch((err) => {
       console.error('Erro ao gerar devocional:', err);
+      registrarLogGeracao(process.argv[3] || 'geral', 'ERRO', err.message);
       process.exit(1);
     });
 }
 
-module.exports = { gerarDevocional };
+module.exports = { gerarDevocional, registrarLogGeracao };

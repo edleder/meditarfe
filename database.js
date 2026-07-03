@@ -253,6 +253,15 @@ db.exec(`
     ativo INTEGER DEFAULT 1,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  -- Logs de geração automática
+  CREATE TABLE IF NOT EXISTS logs_geracao (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tipo TEXT NOT NULL,
+    status TEXT NOT NULL,
+    mensagem TEXT,
+    data_execucao TEXT DEFAULT (datetime('now', '-3 hours'))
+  );
 `);
 
 // Migrações

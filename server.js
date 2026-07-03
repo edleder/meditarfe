@@ -567,6 +567,17 @@ app.delete('/api/admin/logs', auth, temPermissao('logs'), (req, res) => {
   res.json({ sucesso: true });
 });
 
+// ── Logs de Geração ──
+app.get('/api/admin/logs-geracao', auth, temPermissao('configuracoes'), (req, res) => {
+  const ultimos = db.prepare(`
+    SELECT tipo, status, mensagem, data_execucao
+    FROM logs_geracao
+    ORDER BY data_execucao DESC
+    LIMIT 50
+  `).all();
+  res.json(ultimos);
+});
+
 // ── Auth Admin ──
 app.post('/api/admin/login', (req, res) => {
   const { usuario, senha } = req.body;
@@ -635,14 +646,28 @@ app.delete('/api/admin/oracao/:id', auth, (req, res) => {
 });
 
 // ── Cron ──────────────────────────────────────────────────────────────────────
-if (process.env.GEMINI_API_KEY) {
+if (process.env.GROQ_API_KEY) {
   cron.schedule('5 0 * * *', async () => {
-    try { await gerarDevocional(null, 'geral'); } catch (e) { console.error('[CRON geral]', e.message); }
-    try { await gerarDevocional(null, 'hfc');   } catch (e) { console.error('[CRON hfc]', e.message); }
-    try { await gerarDevocional(null, 'ele');   } catch (e) { console.error('[CRON ele]', e.message); }
-    try { await gerarDevocional(null, 'ela');   } catch (e) { console.error('[CRON ela]', e.message); }
-    try { await gerarDevocional(null, 'casal'); } catch (e) { console.error('[CRON casal]', e.message); }
+    const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    console.log(`[${timestamp}] Iniciando geração automática de devocionais...`);
+
+    const tipos = ['geral', 'hfc', 'ele', 'ela', 'casal'];
+    for (const tipo of tipos) {
+      try {
+        await gerarDevocional(null, tipo);
+        console.log(`[${timestamp}] ✓ CRON ${tipo} concluído com sucesso`);
+      } catch (e) {
+        const erro = `${e.message}${e.stack ? '\n' + e.stack : ''}`;
+        console.error(`[${timestamp}] ✗ CRON ${tipo} falhou: ${e.message}`);
+        try {
+          db.prepare(`INSERT INTO logs_geracao (tipo, status, mensagem) VALUES (?, ?, ?)`).run(tipo, 'ERRO', erro.substring(0, 500));
+        } catch {}
+      }
+    }
   }, { timezone: 'America/Sao_Paulo' });
+  console.log('[INIT] Cron job agendado para 00:05 (horário de Brasília)');
+} else {
+  console.warn('[INIT] ⚠️  GROQ_API_KEY não configurada - cron job DESATIVADO');
 }
 
 // ── Start ──────────────────────────────────────────────────────────────────────
