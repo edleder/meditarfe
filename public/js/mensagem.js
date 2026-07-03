@@ -195,13 +195,6 @@ function renderizarDevocional(d) {
     }
   }
 
-  // Mostra frase final para casal
-  if (IS_CASAL) {
-    const fraseEl = document.getElementById('fraseInspiradora');
-    if (fraseEl) {
-      fraseEl.textContent = 'A paciência é o amor se tornando visível. ❤️';
-    }
-  }
 
   // Mostra/esconde só a seção de vídeo dentro do slide (não o slide inteiro)
   const videoSection = document.getElementById('videoSection');
