@@ -462,13 +462,17 @@ document.querySelectorAll('.pdot').forEach(dot => {
 // ── Controle de Música ────────────────────────────────────────────────────
 function toggleMusica() {
   const audio = document.getElementById('musicaFundo');
-  const btn = document.getElementById('btnMusicaFundo');
+  const iconPlay = document.getElementById('iconPlay');
+  const iconPause = document.getElementById('iconPause');
+
   if (audio.paused) {
     audio.play();
-    btn.classList.remove('muted');
+    iconPlay.classList.add('hidden');
+    iconPause.classList.remove('hidden');
   } else {
     audio.pause();
-    btn.classList.add('muted');
+    iconPlay.classList.remove('hidden');
+    iconPause.classList.add('hidden');
   }
 }
 
