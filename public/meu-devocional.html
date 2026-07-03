@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Devocional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 2em 1em;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3em;
+      padding: 2em 0;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1em;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5em;
+      color: #c9a96e;
+      margin-bottom: 0.5em;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1em;
+      color: #999;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5em;
+      margin-bottom: 2em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 1.5em;
+      font-weight: 600;
+    }
+
+    .devocional-content {
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .devocional-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5em;
+      color: #1a1a1a;
+      margin: 1.5em 0 1em;
+      font-weight: 600;
+    }
+
+    .devocional-content p {
+      margin-bottom: 1.2em;
+      text-align: justify;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2em;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #c9a96e;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error {
+      background: #fef2f2;
+      padding: 2em;
+      border-radius: 12px;
+      border-left: 4px solid #f97316;
+      text-align: center;
+    }
+
+    .error p {
+      color: #666;
+      margin-bottom: 1.5em;
+    }
+
+    .button {
+      display: inline-block;
+      background: #c9a96e;
+      color: #1a1a1a;
+      padding: 1em 2em;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: #b8956f;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3em;
+      padding-top: 2em;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .card {
+        padding: 1.5em;
+      }
+
+      .devocional-content p {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="/img/logo-casal.png" alt="Juntos na Fé" class="logo" />
+      <h1>Meu Devocional</h1>
+      <p>Seu espaço exclusivo para meditação</p>
+    </header>
+
+    <div id="conteudo" class="card">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Carregando devocional...</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>💕 Juntos na Fé - Devocional Diário para Casais</p>
+    </footer>
+  </div>
+
+  <script>
+    const TOKEN_ADMIN = '0pt1pl3x';
+
+    function obterTokenDaURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('token');
+    }
+
+    function validarTokenAdmin() {
+      const tokenURL = obterTokenDaURL();
+      const tokenStorage = localStorage.getItem('meu_devocional_token');
+
+      if (tokenURL === TOKEN_ADMIN) {
+        localStorage.setItem('meu_devocional_token', TOKEN_ADMIN);
+        return true;
+      }
+
+      if (tokenStorage === TOKEN_ADMIN) {
+        return true;
+      }
+
+      return false;
+    }
+
+    async function carregarDevocional() {
+      try {
+        const response = await fetch('/api/devocional/hoje');
+        const dados = await response.json();
+
+        if (dados.error) {
+          mostrarErro('Devocional de hoje não está disponível ainda.');
+          return;
+        }
+
+        mostrarDevocional(dados);
+      } catch (e) {
+        console.error('Erro ao carregar devocional:', e);
+        mostrarErro('Erro ao carregar devocional. Tente novamente.');
+      }
+    }
+
+    function mostrarDevocional(dados) {
+      const dataFormatada = new Date(dados.data).toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      const html = `
+        <h2>${dataFormatada}</h2>
+        <div class="devocional-content">
+          ${dados.titulo ? `<h3>${dados.titulo}</h3>` : ''}
+          ${dados.texto ? `<p>${dados.texto}</p>` : ''}
+          ${dados.reflexao ? `<h3>Reflexão</h3><p>${dados.reflexao}</p>` : ''}
+          ${dados.oracao ? `<h3>Oração</h3><p>${dados.oracao}</p>` : ''}
+        </div>
+      `;
+
+      document.getElementById('conteudo').innerHTML = html;
+    }
+
+    function mostrarErro(mensagem) {
+      document.getElementById('conteudo').innerHTML = `
+        <div class="error">
+          <p>${mensagem}</p>
+          <a href="/" class="button">Voltar para Página Inicial</a>
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!validarTokenAdmin()) {
+        mostrarErro('Acesso negado. Token inválido.');
+        return;
+      }
+
+      carregarDevocional();
+    });
+  </script>
+</body>
+</html>
