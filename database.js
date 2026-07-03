@@ -262,6 +262,19 @@ db.exec(`
     mensagem TEXT,
     data_execucao TEXT DEFAULT (datetime('now', '-3 hours'))
   );
+
+  -- Assinaturas de usuários
+  CREATE TABLE IF NOT EXISTS assinaturas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    plano TEXT NOT NULL,
+    token TEXT UNIQUE,
+    hotmart_purchase_id TEXT,
+    data_compra TEXT DEFAULT (datetime('now')),
+    data_expiracao TEXT NOT NULL,
+    ativo INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 // Migrações
