@@ -1,12 +1,12 @@
 // ── Sistema de Bloqueio de Acesso ────────────────────────────────────────────
 
-function verificarAcesso() {
-  // Verifica se está na página de planos
-  if (window.location.pathname === '/planos') {
+async function verificarAcesso() {
+  // Verifica se está na página de planos ou sucesso
+  if (window.location.pathname === '/planos' || window.location.pathname === '/sucesso') {
     return true;
   }
 
-  // Verifica se tem token de assinatura válido
+  // Verifica se tem token de assinatura válido no localStorage
   const tokenAssinatura = localStorage.getItem('assinatura_token');
   const dataExpiracao = localStorage.getItem('assinatura_expira');
 
@@ -16,7 +16,7 @@ function verificarAcesso() {
     return false;
   }
 
-  // Verifica se expirou
+  // Verifica se expirou localmente
   const agora = new Date().getTime();
   const expira = new Date(dataExpiracao).getTime();
 
@@ -28,8 +28,27 @@ function verificarAcesso() {
     return false;
   }
 
-  // Tem assinatura válida = libera acesso
-  return true;
+  // Valida com servidor (mais robusto)
+  try {
+    const response = await fetch(`/api/assinatura/validar/${tokenAssinatura}`);
+    if (response.ok) {
+      const dados = await response.json();
+      if (dados.valido) {
+        // Assinatura válida no servidor
+        return true;
+      }
+    }
+  } catch (e) {
+    console.warn('Erro ao validar com servidor, usando localStorage:', e);
+    // Se houver erro na validação do servidor, usa localStorage como fallback
+    return true;
+  }
+
+  // Se chegou aqui, assinatura não é válida
+  localStorage.removeItem('assinatura_token');
+  localStorage.removeItem('assinatura_expira');
+  bloqueiaAcesso();
+  return false;
 }
 
 function bloqueiaAcesso() {
