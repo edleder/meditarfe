@@ -239,11 +239,36 @@
       <img src="/img/logo-casal.png" alt="Juntos na Fé" class="logo" />
       <h1>Escolha seu Plano</h1>
       <p>Acesso ao devocional exclusivo Juntos na Fé com reflexões, meditações e orações diárias para fortalecer sua fé e relacionamento</p>
-      <a href="/perfil" style="margin-top: 1em; display: inline-block; color: #c9a96e; text-decoration: none; font-size: 0.9em;">← Meu Perfil</a>
     </header>
 
-    <!-- Plans Grid -->
-    <div class="planos-grid">
+    <!-- Seção de Token -->
+    <div id="secao-token" style="max-width: 600px; margin: 2em auto 3em; text-align: center;">
+      <div style="background: #f9f5f0; padding: 2em; border-radius: 12px; border-left: 4px solid #c9a96e;">
+        <h3 style="color: #333; margin-bottom: 1em; font-family: 'Cormorant Garamond', serif; font-size: 1.5em;">Já é assinante?</h3>
+        <p style="color: #666; margin-bottom: 1.5em;">Insira seu token para validar sua assinatura</p>
+        <div style="display: flex; gap: 0.5em; margin-bottom: 1em;">
+          <input
+            type="text"
+            id="token-input"
+            placeholder="Cole seu token aqui..."
+            style="flex: 1; padding: 0.8em; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em;"
+          />
+          <button
+            onclick="validarToken()"
+            style="background: #c9a96e; color: #1a1a1a; border: none; padding: 0.8em 1.5em; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;"
+          >
+            Validar
+          </button>
+        </div>
+        <p style="font-size: 0.85em; color: #999;">Se não tem token, <a href="#" onclick="limparToken(); return false;" style="color: #c9a96e; text-decoration: none; font-weight: 600;">clique aqui</a> para ver os planos</p>
+      </div>
+    </div>
+
+    <!-- Conteúdo dinâmico (assinatura ou planos) -->
+    <div id="conteudo-principal"></div>
+
+    <!-- Plans Grid (oculto por padrão) -->
+    <div class="planos-grid" id="planos-grid">
       <!-- Plano 1 Mês -->
       <div class="plano-card">
         <div class="badge">1 Mês</div>
