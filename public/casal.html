@@ -53,6 +53,14 @@
       <button class="btn-retry" onclick="carregarDevocional()">Tentar novamente</button>
     </div>
 
+    <!-- Acesso Negado (NFC) -->
+    <div class="card error-card hidden" id="acessoNegadoCard">
+      <div class="error-icon">🔒</div>
+      <h2>Acesso Negado</h2>
+      <p>Esta pulseira não tem permissão para acessar este devocional.</p>
+      <p style="font-size: 0.9em; opacity: 0.7; margin-top: 1em;">Verifique o código ou entre em contato com a equipe.</p>
+    </div>
+
     <!-- Slider de páginas -->
     <div class="slider-viewport hidden" id="sliderViewport">
       <div class="slider-track" id="sliderTrack">
