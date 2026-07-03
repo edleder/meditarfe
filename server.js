@@ -170,6 +170,9 @@ app.post('/api/webhook/hotmart', (req, res) => {
 
     console.log(`✅ Assinatura criada: ${email} - ${plano} até ${dataExpiracao.toISOString()}`);
 
+    // Envia email de confirmação (não-bloqueante)
+    enviarEmailConfirmacao(email, plano, dataExpiracao.toISOString());
+
     res.json({
       sucesso: true,
       token: token,
