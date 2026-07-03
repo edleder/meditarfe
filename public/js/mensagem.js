@@ -459,5 +459,18 @@ document.querySelectorAll('.pdot').forEach(dot => {
   });
 });
 
+// ── Controle de Música ────────────────────────────────────────────────────
+function toggleMusica() {
+  const audio = document.getElementById('musicaFundo');
+  const btn = document.getElementById('btnMusicaFundo');
+  if (audio.paused) {
+    audio.play();
+    btn.classList.remove('muted');
+  } else {
+    audio.pause();
+    btn.classList.add('muted');
+  }
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
 carregarDevocional();
