@@ -480,6 +480,27 @@ function toggleMusica() {
 sessionStorage.clear();
 if (window.location.pathname.includes('/casal')) {
   localStorage.removeItem('casalData');
+
+  // Validar acesso via NFC na página casal
+  const params = new URLSearchParams(window.location.search);
+  const codigoAcesso = params.get('acesso');
+
+  if (codigoAcesso) {
+    fetch(`/api/casal/validar/${codigoAcesso}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.valido) {
+          document.getElementById('errorCard').classList.add('hidden');
+          document.getElementById('acessoNegadoCard').classList.remove('hidden');
+          document.getElementById('skeletonCard').classList.add('hidden');
+          document.getElementById('sliderViewport').classList.add('hidden');
+        }
+      })
+      .catch(e => {
+        console.error('Erro validando acesso:', e);
+        document.getElementById('acessoNegadoCard').classList.remove('hidden');
+      });
+  }
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
