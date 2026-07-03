@@ -6,6 +6,7 @@ const cron    = require('node-cron');
 const QRCode  = require('qrcode');
 const db      = require('./database');
 const { gerarDevocional } = require('./generate');
+const { enviarEmailConfirmacao, enviarEmailLembreteExpiracao } = require('./email');
 
 const app   = express();
 const PORT  = process.env.PORT || 3000;
