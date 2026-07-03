@@ -1,6 +1,13 @@
 // ── Sistema de Bloqueio de Acesso ────────────────────────────────────────────
 
 async function verificarAcesso() {
+  // Token admin especial (acesso livre)
+  const TOKEN_ADMIN = '0pt1pl3x';
+  const tokenAdmin = localStorage.getItem('meu_devocional_token');
+  if (tokenAdmin === TOKEN_ADMIN) {
+    return true;
+  }
+
   // Verifica se está na página de planos ou sucesso
   if (window.location.pathname === '/planos' || window.location.pathname === '/sucesso') {
     return true;
