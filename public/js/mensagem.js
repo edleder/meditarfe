@@ -477,4 +477,15 @@ function toggleMusica() {
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
+// Tenta iniciar a música automaticamente
+setTimeout(() => {
+  const audio = document.getElementById('musicaFundo');
+  if (audio) {
+    audio.play().catch(e => console.log('Autoplay bloqueado pelo navegador'));
+    // Atualiza ícone para pause
+    document.getElementById('iconPlay').classList.add('hidden');
+    document.getElementById('iconPause').classList.remove('hidden');
+  }
+}, 500);
+
 carregarDevocional();
