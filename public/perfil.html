@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil - Juntos na Fé</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="/js/bloqueio.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --dark: #1a1a1a;
+      --gold: #c9a96e;
+      --light: #f5f5f5;
+      --text: #333;
+      --success: #22c55e;
+      --warning: #f97316;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2em 1em;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 3em;
+      padding: 2em 0;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1em;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5em;
+      color: var(--gold);
+      margin-bottom: 0.5em;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1em;
+      color: #999;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5em;
+      margin-bottom: 2em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8em;
+      color: var(--text);
+      margin-bottom: 1.5em;
+      font-weight: 600;
+    }
+
+    /* Status */
+    .status {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5em;
+      padding: 1.5em;
+      background: #f0fdf4;
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+    }
+
+    .status.expirado {
+      background: #fef2f2;
+      border-left-color: var(--warning);
+    }
+
+    .status-icon {
+      font-size: 2em;
+      margin-right: 1.5em;
+    }
+
+    .status-info h3 {
+      color: var(--text);
+      margin-bottom: 0.3em;
+      font-size: 1.1em;
+    }
+
+    .status-info p {
+      color: #666;
+      font-size: 0.95em;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: #f9f5f0;
+      padding: 1.5em;
+      border-radius: 8px;
+      margin-bottom: 1.5em;
+      border-left: 4px solid var(--gold);
+    }
+
+    .info-box strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 0.5em;
+    }
+
+    .info-box p {
+      color: #666;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 1em;
+      margin-top: 1.5em;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 1em 1.5em;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--dark);
+      border: 2px solid var(--gold);
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 3em;
+      padding-top: 2em;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: var(--gold);
+      text-decoration: none;
+      margin-bottom: 1em;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 2em;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .card {
+        padding: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/mensagem" class="back-link">← Voltar para Devocional</a>
+
+    <header>
+      <img src="/img/logo-casal.png" alt="Juntos na Fé" class="logo" />
+      <h1>Meu Perfil</h1>
+      <p>Gerencie sua assinatura</p>
+    </header>
+
+    <div class="card" id="conteudo">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Carregando dados...</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>💕 Juntos na Fé - Devocional Diário para Casais</p>
+    </footer>
+  </div>
+
+  <script>
+    async function carregarPerfil() {
+      const token = localStorage.getItem('assinatura_token');
+
+      if (!token) {
+        document.getElementById('conteudo').innerHTML = `
+          <div style="text-align: center; padding: 2em;">
+            <p style="color: #666; margin-bottom: 1.5em;">Você não possui uma assinatura ativa.</p>
+            <a href="/planos" class="btn btn-primary" style="display: inline-block;">Ver Planos</a>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        // Valida token com servidor
+        const response = await fetch(`/api/assinatura/validar/${token}`);
+        const dados = await response.json();
+
+        if (!dados.valido) {
+          localStorage.removeItem('assinatura_token');
+          localStorage.removeItem('assinatura_expira');
+          document.getElementById('conteudo').innerHTML = `
+            <div style="text-align: center; padding: 2em;">
+              <p style="color: #666; margin-bottom: 1.5em;">Sua assinatura expirou.</p>
+              <a href="/planos" class="btn btn-primary" style="display: inline-block;">Renovar Assinatura</a>
+            </div>
+          `;
+          return;
+        }
+
+        // Calcula dias restantes
+        const expiracao = new Date(dados.expira_em);
+        const agora = new Date();
+        const diasRestantes = Math.ceil((expiracao - agora) / (1000 * 60 * 60 * 24));
+
+        const dataFormatada = expiracao.toLocaleDateString('pt-BR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        const nomesDosPlanos = {
+          '1mes': 'Plano Mensal',
+          '3meses': 'Plano Trimestral',
+          '6meses': 'Plano Semestral',
+          '1ano': 'Plano Anual'
+        };
+
+        const statusHTML = diasRestantes > 7
+          ? `
+            <div class="status">
+              <div class="status-icon">✓</div>
+              <div class="status-info">
+                <h3>Assinatura Ativa</h3>
+                <p>${diasRestantes} dias restantes</p>
+              </div>
+            </div>
+          `
+          : diasRestantes > 0
+          ? `
+            <div class="status">
+              <div class="status-icon">⚠️</div>
+              <div class="status-info">
+                <h3>Expirando em Breve</h3>
+                <p>${diasRestantes} dias restantes</p>
+              </div>
+            </div>
+          `
+          : `
+            <div class="status expirado">
+              <div class="status-icon">✕</div>
+              <div class="status-info">
+                <h3>Assinatura Expirada</h3>
+                <p>Renove seu acesso</p>
+              </div>
+            </div>
+          `;
+
+        document.getElementById('conteudo').innerHTML = `
+          <h2>Status da Assinatura</h2>
+          ${statusHTML}
+
+          <div class="info-box">
+            <strong>Plano:</strong>
+            <p>${nomesDosPlanos[dados.plano] || dados.plano}</p>
+          </div>
+
+          <div class="info-box">
+            <strong>Expira em:</strong>
+            <p>${dataFormatada}</p>
+          </div>
+
+          <div class="info-box">
+            <strong>Email:</strong>
+            <p>${dados.email}</p>
+          </div>
+
+          <div class="button-group">
+            <a href="/mensagem" class="btn btn-primary">Ir para Devocional</a>
+            <a href="/planos" class="btn btn-secondary" target="_blank">Renovar/Upgrade</a>
+          </div>
+        `;
+      } catch (e) {
+        console.error('Erro ao carregar perfil:', e);
+        document.getElementById('conteudo').innerHTML = `
+          <div style="text-align: center; padding: 2em;">
+            <p style="color: #666; margin-bottom: 1.5em;">Erro ao carregar dados da assinatura.</p>
+            <a href="/mensagem" class="btn btn-primary" style="display: inline-block;">Voltar</a>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarPerfil);
+  </script>
+</body>
+</html>
