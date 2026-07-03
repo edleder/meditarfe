@@ -476,6 +476,12 @@ function toggleMusica() {
   }
 }
 
+// ── Limpar Cache ──────────────────────────────────────────────────────────
+sessionStorage.clear();
+if (window.location.pathname.includes('/casal')) {
+  localStorage.removeItem('casalData');
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
 // Tenta iniciar a música automaticamente
 setTimeout(() => {
