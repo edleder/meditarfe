@@ -108,6 +108,81 @@ app.get('/api/casal/validar/:codigo', (req, res) => {
   }
 });
 
+// Validar assinatura (via token)
+app.get('/api/assinatura/validar/:token', (req, res) => {
+  const assinatura = db.prepare(`
+    SELECT * FROM assinaturas
+    WHERE token = ? AND ativo = 1 AND data_expiracao > datetime('now')
+  `).get(req.params.token);
+
+  if (assinatura) {
+    res.json({
+      valido: true,
+      email: assinatura.email,
+      plano: assinatura.plano,
+      expira_em: assinatura.data_expiracao
+    });
+  } else {
+    res.status(403).json({ valido: false, mensagem: 'Assinatura inválida ou expirada' });
+  }
+});
+
+// Webhook da Hotmart (recebe notificação de pagamento)
+app.post('/api/webhook/hotmart', (req, res) => {
+  try {
+    const dados = req.body;
+
+    // Dados básicos do webhook
+    const email = dados.email || dados.buyer_email || 'nao_fornecido@example.com';
+    const plano = dados.plano || '1mes';
+    const hotmart_purchase_id = dados.purchase_id || dados.id || null;
+
+    // Calcula data de expiração baseada no plano
+    const agora = new Date();
+    let dataExpiracao = new Date(agora);
+
+    switch(plano) {
+      case '3meses':
+        dataExpiracao.setMonth(dataExpiracao.getMonth() + 3);
+        break;
+      case '6meses':
+        dataExpiracao.setMonth(dataExpiracao.getMonth() + 6);
+        break;
+      case '1ano':
+        dataExpiracao.setFullYear(dataExpiracao.getFullYear() + 1);
+        break;
+      case '1mes':
+      default:
+        dataExpiracao.setMonth(dataExpiracao.getMonth() + 1);
+    }
+
+    // Gera token único
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // Salva no banco de dados
+    db.prepare(`
+      INSERT OR REPLACE INTO assinaturas
+      (email, plano, token, hotmart_purchase_id, data_expiracao, ativo)
+      VALUES (?, ?, ?, ?, ?, 1)
+    `).run(email, plano, token, hotmart_purchase_id, dataExpiracao.toISOString());
+
+    console.log(`✅ Assinatura criada: ${email} - ${plano} até ${dataExpiracao.toISOString()}`);
+
+    res.json({
+      sucesso: true,
+      token: token,
+      message: 'Assinatura ativada com sucesso'
+    });
+
+  } catch (e) {
+    console.error('❌ Erro no webhook Hotmart:', e.message);
+    res.status(400).json({
+      sucesso: false,
+      error: e.message
+    });
+  }
+});
+
 // Devocionais gerais
 app.get('/api/devocional/hoje', (_, res) => {
   const d = db.prepare('SELECT * FROM devocionais WHERE data = ?').get(dataHojeBR());
