@@ -764,6 +764,38 @@ if (process.env.GROQ_API_KEY) {
   console.warn('[INIT] ⚠️  GROQ_API_KEY não configurada - cron job DESATIVADO');
 }
 
+// Cron para enviar lembretes de expiração (diariamente às 9:00)
+cron.schedule('0 9 * * *', async () => {
+  const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  console.log(`[${timestamp}] Enviando lembretes de expiração de assinaturas...`);
+
+  try {
+    const assinaturasProximas = db.prepare(`
+      SELECT email, plano, data_expiracao
+      FROM assinaturas
+      WHERE ativo = 1
+      AND data_expiracao > datetime('now')
+      AND datetime('now', '+7 days') >= data_expiracao
+    `).all();
+
+    for (const assinatura of assinaturasProximas) {
+      const diasRestantes = Math.ceil((new Date(assinatura.data_expiracao) - new Date()) / (1000 * 60 * 60 * 24));
+      if (diasRestantes > 0 && diasRestantes <= 7) {
+        await enviarEmailLembreteExpiracao(
+          assinatura.email,
+          assinatura.plano,
+          diasRestantes,
+          assinatura.data_expiracao
+        );
+      }
+    }
+
+    console.log(`[${timestamp}] ✓ Lembretes enviados com sucesso`);
+  } catch (e) {
+    console.error(`[${timestamp}] ✗ Erro ao enviar lembretes: ${e.message}`);
+  }
+}, { timezone: 'America/Sao_Paulo' });
+
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`
