@@ -476,18 +476,21 @@ function toggleMusica() {
   }
 }
 
-// ── Limpar Cache ──────────────────────────────────────────────────────────
-sessionStorage.clear();
+// ── Validar Acesso Casal (NFC) ────────────────────────────────────────────
 if (window.location.pathname.includes('/casal')) {
+  sessionStorage.clear();
   localStorage.removeItem('casalData');
 
-  // Validar acesso via NFC na página casal
   const params = new URLSearchParams(window.location.search);
   const codigoAcesso = params.get('acesso');
 
+  // Bloquear tudo por padrão
+  document.getElementById('sliderViewport').classList.add('hidden');
+  document.getElementById('skeletonCard').classList.add('hidden');
+  document.getElementById('errorCard').classList.add('hidden');
+
   if (!codigoAcesso) {
-    // Sem código = acesso negado
-    document.getElementById('errorCard').classList.add('hidden');
+    // Sem código = acesso negado completo
     document.getElementById('acessoNegadoCard').innerHTML = `
       <div class="error-icon">🔒</div>
       <h2>Acesso Restrito</h2>
@@ -495,32 +498,35 @@ if (window.location.pathname.includes('/casal')) {
       <p style="font-size: 0.9em; opacity: 0.7; margin-top: 1em;">Este conteúdo é exclusivo para proprietários de pulseiras autorizadas.</p>
     `;
     document.getElementById('acessoNegadoCard').classList.remove('hidden');
-    document.getElementById('skeletonCard').classList.add('hidden');
-    document.getElementById('sliderViewport').classList.add('hidden');
   } else {
     // Validar o código fornecido
     fetch(`/api/casal/validar/${codigoAcesso}`)
       .then(res => res.json())
       .then(data => {
-        if (!data.valido) {
-          document.getElementById('errorCard').classList.add('hidden');
+        if (data.valido) {
+          // Código válido = libera acesso
+          document.getElementById('acessoNegadoCard').classList.add('hidden');
+          document.getElementById('skeletonCard').classList.remove('hidden');
+          document.getElementById('sliderViewport').classList.remove('hidden');
+          // Carregar devocional normalmente
+          carregarDevocional();
+        } else {
+          // Código inválido
           document.getElementById('acessoNegadoCard').innerHTML = `
             <div class="error-icon">❌</div>
             <h2>Pulseira Não Autorizada</h2>
             <p>Esta pulseira não tem permissão para acessar este conteúdo.</p>
           `;
           document.getElementById('acessoNegadoCard').classList.remove('hidden');
-          document.getElementById('skeletonCard').classList.add('hidden');
-          document.getElementById('sliderViewport').classList.add('hidden');
         }
       })
       .catch(e => {
         console.error('Erro validando acesso:', e);
         document.getElementById('acessoNegadoCard').classList.remove('hidden');
-        document.getElementById('skeletonCard').classList.add('hidden');
-        document.getElementById('sliderViewport').classList.add('hidden');
       });
   }
+} else {
+  sessionStorage.clear();
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
