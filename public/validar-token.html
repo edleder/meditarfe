@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validar Token - Juntos na Fé</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --dark: #1a1a1a;
+      --gold: #c9a96e;
+      --light: #f5f5f5;
+      --text: #333;
+      --success: #22c55e;
+      --warning: #f97316;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2em 1em;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3em;
+      padding: 2em 0;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1em;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2em;
+      color: var(--gold);
+      margin-bottom: 0.5em;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 0.95em;
+      color: #999;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2em;
+    }
+
+    .card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8em;
+      color: var(--text);
+      margin-bottom: 1em;
+      font-weight: 600;
+    }
+
+    .card p {
+      color: #666;
+      margin-bottom: 1.5em;
+      line-height: 1.6;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 1.5em;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 1em;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+    }
+
+    button {
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      padding: 1em 2em;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.95em;
+    }
+
+    button:hover {
+      background: #b8956f;
+      transform: scale(1.05);
+    }
+
+    button:disabled {
+      background: #ddd;
+      color: #999;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .link {
+      text-align: center;
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .link a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .info-box {
+      background: #f0f9ff;
+      padding: 1.5em;
+      border-radius: 8px;
+      border-left: 4px solid var(--gold);
+      margin-bottom: 1.5em;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1em;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-box {
+      display: none;
+      background: #f0fdf4;
+      padding: 2em;
+      border-radius: 8px;
+      border-left: 4px solid var(--success);
+    }
+
+    .success-box h3 {
+      color: var(--success);
+      margin-bottom: 1em;
+    }
+
+    .success-box p {
+      color: #666;
+      margin-bottom: 0.5em;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 1em;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .card {
+        padding: 1.5em;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="/img/logo-casal.png" alt="Juntos na Fé" class="logo" />
+      <h1>Validar Token</h1>
+      <p>Já é assinante? Ative seu acesso aqui</p>
+    </header>
+
+    <div class="card">
+      <h2>Insira seu Token</h2>
+      <p>Você recebeu um token por email após a compra. Cole-o aqui para validar sua assinatura.</p>
+
+      <div class="info-box">
+        <p>
+          💡 <strong>Não encontra seu token?</strong><br>
+          Verifique sua caixa de emails pela mensagem de confirmação de pagamento. O token está em destaque lá.
+        </p>
+      </div>
+
+      <div id="form-section">
+        <div class="input-group">
+          <input
+            type="text"
+            id="token-input"
+            placeholder="Cole seu token aqui..."
+            autofocus
+          />
+          <button onclick="validarToken()" id="btn-validar">Validar</button>
+        </div>
+
+        <div class="link">
+          <p>Não tem token? <a href="/planos">Compre um plano aqui</a></p>
+        </div>
+      </div>
+
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Validando token...</p>
+      </div>
+
+      <div id="success-section" class="success-box">
+        <h3>✓ Assinatura Validada!</h3>
+        <div id="success-content"></div>
+        <a href="/mensagem" class="back-link">Acessar Devocional →</a>
+      </div>
+
+      <div id="error-section" style="display: none; background: #fef2f2; padding: 1.5em; border-radius: 8px; border-left: 4px solid var(--warning); margin-top: 1.5em;">
+        <p style="color: var(--warning); font-weight: 600; margin-bottom: 1em;" id="error-msg"></p>
+        <button onclick="resetForm()" style="width: 100%;">Tentar Novamente</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>💕 Juntos na Fé - Devocional Diário para Casais</p>
+    </footer>
+  </div>
+
+  <script>
+    const nomesDosPlanos = {
+      '1mes': 'Plano Mensal',
+      '3meses': 'Plano Trimestral',
+      '6meses': 'Plano Semestral',
+      '1ano': 'Plano Anual'
+    };
+
+    async function validarToken() {
+      const token = document.getElementById('token-input').value.trim();
+
+      if (!token) {
+        alert('Por favor, insira seu token');
+        return;
+      }
+
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('error-section').style.display = 'none';
+
+      try {
+        const response = await fetch(`/api/assinatura/validar/${token}`);
+        const dados = await response.json();
+
+        if (dados.valido) {
+          localStorage.setItem('assinatura_token', token);
+          localStorage.setItem('assinatura_expira', dados.expira_em);
+          mostrarSucesso(dados);
+        } else {
+          mostrarErro('Token inválido ou expirado. Verifique e tente novamente.');
+        }
+      } catch (e) {
+        console.error('Erro ao validar token:', e);
+        mostrarErro('Erro ao validar token. Tente novamente mais tarde.');
+      }
+    }
+
+    function mostrarSucesso(dados) {
+      const expiracao = new Date(dados.expira_em);
+      const agora = new Date();
+      const diasRestantes = Math.ceil((expiracao - agora) / (1000 * 60 * 60 * 24));
+
+      const dataFormatada = expiracao.toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      const nomeDoPlano = nomesDosPlanos[dados.plano] || dados.plano;
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('success-section').style.display = 'block';
+      document.getElementById('success-content').innerHTML = `
+        <p><strong>Plano:</strong> ${nomeDoPlano}</p>
+        <p><strong>Email:</strong> ${dados.email}</p>
+        <p><strong>Válido até:</strong> ${dataFormatada}</p>
+        <p><strong>Dias restantes:</strong> ${diasRestantes} dias</p>
+      `;
+    }
+
+    function mostrarErro(mensagem) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error-section').style.display = 'block';
+      document.getElementById('error-msg').textContent = mensagem;
+    }
+
+    function resetForm() {
+      document.getElementById('token-input').value = '';
+      document.getElementById('form-section').style.display = 'block';
+      document.getElementById('error-section').style.display = 'none';
+      document.getElementById('success-section').style.display = 'none';
+      document.getElementById('token-input').focus();
+    }
+
+    // Permite validar com Enter
+    document.getElementById('token-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') validarToken();
+    });
+
+    // Carrega token salvo se existir
+    document.addEventListener('DOMContentLoaded', () => {
+      const tokenSalvo = localStorage.getItem('assinatura_token');
+      if (tokenSalvo) {
+        document.getElementById('token-input').value = tokenSalvo;
+        // Não valida automaticamente, deixa o usuário decidir
+      }
+    });
+  </script>
+</body>
+</html>
