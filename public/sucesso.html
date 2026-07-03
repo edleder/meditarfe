@@ -144,13 +144,19 @@
 
   <script src="/js/bloqueio.js"></script>
   <script>
-    // Pega a duração do plano da URL
+    // Pega a duração do plano e email da URL
     const params = new URLSearchParams(window.location.search);
     const plano = params.get('plano') || '1mes';
+    const email = params.get('email') || 'usuario@example.com';
 
     // Ativa a assinatura imediatamente
-    ativarAssinatura(plano);
-    console.log('✅ Assinatura ativada para:', plano);
+    ativarAssinatura(plano, email).then(sucesso => {
+      if (sucesso) {
+        console.log('✅ Assinatura ativada para:', plano);
+      } else {
+        console.error('❌ Erro ao ativar assinatura');
+      }
+    });
 
     // Countdown para redirecionamento
     let segundos = 5;
