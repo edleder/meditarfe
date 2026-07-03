@@ -79,10 +79,20 @@ async function enviarEmailConfirmacao(email, plano, dataExpiracao, token) {
             <div class="info-box">
               <p><span class="info-label">Email de acesso:</span> ${email}</p>
             </div>
+
+            <div class="info-box" style="background: #fef9f0; border-left-color: #f97316;">
+              <p><span class="info-label" style="color: #f97316;">Seu Token:</span></p>
+              <p style="font-family: monospace; background: #fff; padding: 12px; border-radius: 4px; word-break: break-all; color: #1a1a1a; font-size: 0.9em; margin: 10px 0;">
+                ${token}
+              </p>
+              <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                Guarde com segurança. Use em <strong>meditarfe.com/planos</strong>
+              </p>
+            </div>
           </div>
 
           <div style="text-align: center;">
-            <a href="https://www.meditarfe.com/mensagem" class="cta-button">Acessar Devocional Agora</a>
+            <a href="https://www.meditarfe.com/planos" class="cta-button">Validar seu Token</a>
           </div>
 
           <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 5px; border-left: 4px solid #c9a96e;">
