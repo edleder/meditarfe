@@ -66,19 +66,20 @@
     /* Plans Grid */
     .planos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2em;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2em;
       margin: 3em 0;
     }
 
     .plano-card {
       background: white;
       border-radius: 12px;
-      padding: 2.5em;
+      padding: 1.8em;
       text-align: center;
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-size: 0.95em;
     }
 
     .plano-card:hover {
