@@ -52,8 +52,8 @@ async function verificarAcesso() {
 }
 
 function bloqueiaAcesso() {
-  // Redireciona para página de planos
-  window.location.href = '/planos';
+  // Redireciona para página de validação de token
+  window.location.href = '/validar-token';
 }
 
 // ── Ativa assinatura (chamado pela Hotmart após pagamento) ──────────────────
