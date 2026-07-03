@@ -93,6 +93,7 @@ app.get('/casal',          (req, res) => {
 });
 app.get('/planos',         (_, res) => res.sendFile(path.join(__dirname, 'public/planos.html')));
 app.get('/validar-token',  (_, res) => res.sendFile(path.join(__dirname, 'public/validar-token.html')));
+app.get('/meu-devocional', (_, res) => res.sendFile(path.join(__dirname, 'public/meu-devocional.html')));
 app.get('/sucesso',        (_, res) => res.sendFile(path.join(__dirname, 'public/sucesso.html')));
 app.get('/perfil',         (_, res) => res.sendFile(path.join(__dirname, 'public/perfil.html')));
 app.get('/evento/:id',     (_, res) => res.sendFile(path.join(__dirname, 'public/inscricao.html')));
