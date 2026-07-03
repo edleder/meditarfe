@@ -87,7 +87,17 @@ app.get('/mensagem',       (_, res) => res.sendFile(path.join(__dirname, 'public
 app.get('/hfc',            (_, res) => res.sendFile(path.join(__dirname, 'public/hfc.html')));
 app.get('/ele',            (_, res) => res.sendFile(path.join(__dirname, 'public/ele.html')));
 app.get('/ela',            (_, res) => res.sendFile(path.join(__dirname, 'public/ela.html')));
-app.get('/casal',          (_, res) => res.sendFile(path.join(__dirname, 'public/casal.html')));
+app.get('/casal',          (req, res) => {
+  const codigo = req.query.acesso;
+  if (codigo) {
+    const pulseira = db.prepare("SELECT * FROM pulseiras WHERE codigo=? AND ativo=1").get(codigo);
+    if (pulseira) {
+      res.sendFile(path.join(__dirname, 'public/casal.html'));
+      return;
+    }
+  }
+  res.sendFile(path.join(__dirname, 'public/casal.html'));
+});
 app.get('/evento/:id',     (_, res) => res.sendFile(path.join(__dirname, 'public/inscricao.html')));
 app.get('/curso/:id',      (_, res) => res.sendFile(path.join(__dirname, 'public/inscricao.html')));
 app.get('/admin',          (_, res) => res.sendFile(path.join(__dirname, 'public/admin.html')));
