@@ -544,4 +544,7 @@ setTimeout(() => {
   }
 }, 500);
 
-carregarDevocional();
+// Só carrega devocional se não for a página casal (ela valida via NFC)
+if (!window.location.pathname.includes('/casal')) {
+  carregarDevocional();
+}
