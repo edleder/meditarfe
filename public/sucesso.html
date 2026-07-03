@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagamento Confirmado - Juntos na Fé</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1em;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      padding: 3em 2em;
+      border-radius: 12px;
+      max-width: 500px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2em;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      animation: bounce 0.6s ease-out;
+    }
+
+    @keyframes bounce {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    h1 {
+      color: #1a1a1a;
+      margin-bottom: 0.5em;
+      font-size: 2em;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 1.5em;
+      line-height: 1.6;
+      font-size: 1.05em;
+    }
+
+    .info-box {
+      background: #f0f9ff;
+      padding: 1.5em;
+      border-radius: 8px;
+      margin: 1.5em 0;
+      border-left: 4px solid #c9a96e;
+    }
+
+    .info-box strong {
+      color: #1a1a1a;
+    }
+
+    .countdown {
+      font-size: 4em;
+      font-weight: bold;
+      color: #c9a96e;
+      margin: 1em 0;
+    }
+
+    .loader {
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #c9a96e;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1em auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .button {
+      display: inline-block;
+      background: #c9a96e;
+      color: #1a1a1a;
+      padding: 1em 2em;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1em;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: #b8956f;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="checkmark">✓</div>
+    <h1>Pagamento Confirmado! 🎉</h1>
+    <p>Obrigado por sua compra! Seu acesso está sendo ativado...</p>
+
+    <div class="info-box">
+      <strong>Redirecionando em:</strong>
+      <div class="countdown" id="countdown">5</div>
+    </div>
+
+    <div class="loader"></div>
+    <p style="margin-top: 1.5em; color: #999; font-size: 0.95em;">
+      Se não redirecionar automaticamente, clique no botão abaixo
+    </p>
+
+    <button class="button" onclick="ir()">Acessar Devocional</button>
+  </div>
+
+  <script src="/js/bloqueio.js"></script>
+  <script>
+    // Pega a duração do plano da URL
+    const params = new URLSearchParams(window.location.search);
+    const plano = params.get('plano') || '1mes';
+
+    // Ativa a assinatura imediatamente
+    ativarAssinatura(plano);
+    console.log('✅ Assinatura ativada para:', plano);
+
+    // Countdown para redirecionamento
+    let segundos = 5;
+    const countdownEl = document.getElementById('countdown');
+
+    const interval = setInterval(() => {
+      segundos--;
+      countdownEl.textContent = segundos;
+      if (segundos <= 0) {
+        clearInterval(interval);
+        ir();
+      }
+    }, 1000);
+
+    function ir() {
+      window.location.href = '/mensagem';
+    }
+  </script>
+</body>
+</html>
