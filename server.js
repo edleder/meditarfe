@@ -104,6 +104,16 @@ app.get('/admin',          (_, res) => res.sendFile(path.join(__dirname, 'public
 
 // ── API Pública ───────────────────────────────────────────────────────────────
 
+// Validar acesso ao casal via pulseira NFC
+app.get('/api/casal/validar/:codigo', (req, res) => {
+  const pulseira = db.prepare("SELECT * FROM pulseiras WHERE codigo=? AND ativo=1").get(req.params.codigo);
+  if (pulseira) {
+    res.json({ valido: true, mensagem: 'Acesso liberado' });
+  } else {
+    res.status(403).json({ valido: false, mensagem: 'Pulseira não autorizada' });
+  }
+});
+
 // Devocionais gerais
 app.get('/api/devocional/hoje', (_, res) => {
   const d = db.prepare('SELECT * FROM devocionais WHERE data = ?').get(dataHojeBR());
