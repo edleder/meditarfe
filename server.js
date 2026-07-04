@@ -742,29 +742,59 @@ app.delete('/api/admin/oracao/:id', auth, (req, res) => {
 });
 
 // ── Cron ──────────────────────────────────────────────────────────────────────
-if (process.env.GROQ_API_KEY) {
-  cron.schedule('5 0 * * *', async () => {
-    const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    console.log(`[${timestamp}] Iniciando geração automática de devocionais...`);
+async function executarGeracaoDevocionais() {
+  const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  console.log(`\n${'═'.repeat(60)}`);
+  console.log(`[${timestamp}] 🔄 INICIANDO GERAÇÃO DE DEVOCIONAIS`);
+  console.log(`${'═'.repeat(60)}\n`);
 
-    const tipos = ['geral', 'hfc', 'ele', 'ela', 'casal'];
-    for (const tipo of tipos) {
+  const tipos = ['geral', 'hfc', 'ele', 'ela', 'casal'];
+  let sucessos = 0;
+  let falhas = 0;
+
+  for (const tipo of tipos) {
+    try {
+      console.log(`[${timestamp}] ⏳ Gerando devocional: ${tipo}...`);
+      await gerarDevocional(null, tipo);
+      console.log(`[${timestamp}] ✅ ${tipo.toUpperCase()} gerado com sucesso!\n`);
+      sucessos++;
+    } catch (e) {
+      falhas++;
+      const erro = `${e.message}${e.stack ? '\n' + e.stack : ''}`;
+      console.error(`[${timestamp}] ❌ ERRO ao gerar ${tipo}:`);
+      console.error(erro);
+      console.log();
       try {
-        await gerarDevocional(null, tipo);
-        console.log(`[${timestamp}] ✓ CRON ${tipo} concluído com sucesso`);
-      } catch (e) {
-        const erro = `${e.message}${e.stack ? '\n' + e.stack : ''}`;
-        console.error(`[${timestamp}] ✗ CRON ${tipo} falhou: ${e.message}`);
-        try {
-          db.prepare(`INSERT INTO logs_geracao (tipo, status, mensagem) VALUES (?, ?, ?)`).run(tipo, 'ERRO', erro.substring(0, 500));
-        } catch {}
+        db.prepare(`INSERT INTO logs_geracao (tipo, status, mensagem) VALUES (?, ?, ?)`).run(tipo, 'ERRO', erro.substring(0, 500));
+      } catch (logErr) {
+        console.error(`[${timestamp}] Erro ao registrar log: ${logErr.message}`);
       }
     }
-  }, { timezone: 'America/Sao_Paulo' });
-  console.log('[INIT] Cron job agendado para 00:05 (horário de Brasília)');
+  }
+
+  console.log(`${'═'.repeat(60)}`);
+  console.log(`[${timestamp}] ✅ GERAÇÃO CONCLUÍDA: ${sucessos} sucesso(s), ${falhas} falha(s)`);
+  console.log(`${'═'.repeat(60)}\n`);
+}
+
+if (process.env.GROQ_API_KEY) {
+  cron.schedule('5 0 * * *', executarGeracaoDevocionais, { timezone: 'America/Sao_Paulo' });
+  console.log('[INIT] ✅ Cron job agendado para 00:05 (horário de Brasília)');
 } else {
   console.warn('[INIT] ⚠️  GROQ_API_KEY não configurada - cron job DESATIVADO');
 }
+
+// Endpoint para testar geração manual (útil para debug)
+app.post('/api/admin/gerar-devocionais', auth, (req, res) => {
+  if (req.usuario.perfil !== 'superadmin') {
+    return res.status(403).json({ error: 'Sem permissão' });
+  }
+  executarGeracaoDevocionais().then(() => {
+    res.json({ sucesso: true, mensagem: 'Geração iniciada' });
+  }).catch(e => {
+    res.status(500).json({ erro: e.message });
+  });
+});
 
 // Cron para enviar lembretes de expiração (diariamente às 9:00)
 cron.schedule('0 9 * * *', async () => {
