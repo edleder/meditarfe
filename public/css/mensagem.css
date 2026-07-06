@@ -771,15 +771,34 @@ body {
 
   .devocional-card .versiculo-texto {
     border-left: none !important;
-    padding: 0 !important;
+    padding: 20px 40px !important;
     margin: 0 !important;
     font-size: 28px !important;
     line-height: 1.8 !important;
+    position: relative;
   }
 
   .devocional-card .versiculo-texto::before,
   .devocional-card .versiculo-texto::after {
-    display: none !important;
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    line-height: 0;
+    color: var(--gold);
+    opacity: 0.25;
+    position: absolute;
+    font-style: normal;
+  }
+
+  .devocional-card .versiculo-texto::before {
+    content: '\201C';
+    top: -10px;
+    left: 0;
+  }
+
+  .devocional-card .versiculo-texto::after {
+    content: '\201D';
+    bottom: -20px;
+    right: 0;
   }
 
   .devocional-card .ornament {
