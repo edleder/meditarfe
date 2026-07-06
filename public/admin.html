@@ -65,8 +65,11 @@
   <!-- Main -->
   <div class="main-wrapper">
     <div class="topbar">
-      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-      <img src="/img/logo-casal.png" alt="MeditarFé" class="topbar-logo"/>
+      <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-cross" style="color: #c9a96e; font-size: 20px;"></i>
+        <span style="font-weight: 600; color: #c9a96e;">MeditarFé Admin</span>
+      </div>
       <span class="topbar-title" id="topbarTitle">Devocional Geral</span>
       <div class="topbar-user" id="topbarUser">
         <span class="topbar-user-name" id="topbarNome"></span>
