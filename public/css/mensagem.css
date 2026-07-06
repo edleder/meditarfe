@@ -775,24 +775,30 @@ body {
     margin: 0 !important;
     font-size: 28px !important;
     line-height: 1.8 !important;
+    position: relative;
+  }
+
+  .devocional-card .versiculo-texto::before,
+  .devocional-card .versiculo-texto::after {
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    line-height: 0.8;
+    color: var(--gold);
+    opacity: 0.3;
+    position: absolute;
+    font-style: normal;
   }
 
   .devocional-card .versiculo-texto::before {
-    content: '"' !important;
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--text-ink);
-    margin-right: 4px;
-    font-style: italic;
+    content: '\201C';
+    top: 18px;
+    left: 38px;
   }
 
   .devocional-card .versiculo-texto::after {
-    content: '"' !important;
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--text-ink);
-    margin-left: 4px;
-    font-style: italic;
+    content: '\201D';
+    bottom: 10px;
+    right: 38px;
   }
 
   .devocional-card .ornament {
