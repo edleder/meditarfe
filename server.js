@@ -777,7 +777,43 @@ async function executarGeracaoDevocionais() {
   console.log(`${'═'.repeat(60)}\n`);
 }
 
+// Verifica e gera devocionais faltantes no startup
+async function verificarEGerarDevocionaisFaltantes() {
+  if (!process.env.GROQ_API_KEY) return;
+
+  const hoje = dataHojeBR();
+  const tipos = ['geral', 'hfc', 'ele', 'ela', 'casal'];
+  let faltam = false;
+
+  for (const tipo of tipos) {
+    const tabelaMap = { 'hfc': 'devocionais_hfc', 'ele': 'devocionais_ele', 'ela': 'devocionais_ela', 'casal': 'devocionais_casal' };
+    const tabela = tabelaMap[tipo] || 'devocionais';
+    const existe = db.prepare(`SELECT COUNT(*) as n FROM ${tabela} WHERE data = ?`).get(hoje).n > 0;
+
+    if (!existe) {
+      console.log(`[STARTUP] ⚠️  Faltando devocional ${tipo} para hoje (${hoje})`);
+      faltam = true;
+    }
+  }
+
+  if (faltam) {
+    console.log('[STARTUP] 🔄 Iniciando geração automática de devocionais faltantes...');
+    try {
+      await executarGeracaoDevocionais();
+      console.log('[STARTUP] ✅ Devocionais gerados com sucesso!');
+    } catch (e) {
+      console.error('[STARTUP] ❌ Erro ao gerar devocionais:', e.message);
+    }
+  } else {
+    console.log('[STARTUP] ✅ Todos os devocionais de hoje estão disponíveis');
+  }
+}
+
 if (process.env.GROQ_API_KEY) {
+  // Gera devocionais faltantes no startup
+  verificarEGerarDevocionaisFaltantes();
+
+  // Agenda cron job para 00:05
   cron.schedule('5 0 * * *', executarGeracaoDevocionais, { timezone: 'America/Sao_Paulo' });
   console.log('[INIT] ✅ Cron job agendado para 00:05 (horário de Brasília)');
 } else {
