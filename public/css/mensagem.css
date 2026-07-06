@@ -737,6 +737,15 @@ body {
     margin-bottom: 0 !important;
   }
 
+  .card-section .section-body {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+  }
+
+  .card-section .section-label-text {
+    font-size: 12px !important;
+  }
+
   .card-section::before {
     content: '';
     position: absolute;
