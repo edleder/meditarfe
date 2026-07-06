@@ -674,6 +674,57 @@ app.get('/api/admin/logs-geracao', auth, temPermissao('configuracoes'), (req, re
   res.json(ultimos);
 });
 
+// ── Tokens de Acesso Temporário ──
+app.get('/api/admin/tokens', auth, temPermissao('configuracoes'), (req, res) => {
+  const tokens = db.prepare(`
+    SELECT id, token, descricao,
+           datetime(data_criacao, 'localtime') as data_criacao,
+           datetime(data_expiracao, 'localtime') as data_expiracao,
+           ativo,
+           CASE WHEN datetime(data_expiracao) < datetime('now') THEN 'EXPIRADO' ELSE 'ATIVO' END as status
+    FROM tokens_acesso
+    ORDER BY data_criacao DESC
+  `).all();
+  res.json(tokens);
+});
+
+app.post('/api/admin/token', auth, temPermissao('configuracoes'), (req, res) => {
+  const { descricao, dias } = req.body;
+  if (!dias || dias < 1) return res.status(400).json({ error: 'Dias inválido' });
+
+  const token = crypto.randomBytes(24).toString('hex');
+  const dataExpiracao = new Date(Date.now() + dias * 24 * 60 * 60 * 1000).toISOString();
+
+  db.prepare(`
+    INSERT INTO tokens_acesso (token, descricao, data_expiracao)
+    VALUES (?, ?, ?)
+  `).run(token, descricao || '', dataExpiracao);
+
+  registrarLog(req.usuario.nome, 'gerou token de acesso', `${dias} dias - ${descricao}`, req.headers['x-forwarded-for']||req.socket.remoteAddress||'');
+  res.json({ sucesso: true, token, dataExpiracao });
+});
+
+app.delete('/api/admin/token/:id', auth, temPermissao('configuracoes'), (req, res) => {
+  db.prepare('DELETE FROM tokens_acesso WHERE id = ?').run(req.params.id);
+  registrarLog(req.usuario.nome, 'deletou token de acesso', '', req.headers['x-forwarded-for']||req.socket.remoteAddress||'');
+  res.json({ sucesso: true });
+});
+
+// Validação de token (pública)
+app.get('/api/validar-token/:token', (req, res) => {
+  const tokenData = db.prepare(`
+    SELECT id, token, data_expiracao, ativo
+    FROM tokens_acesso
+    WHERE token = ? AND ativo = 1 AND datetime(data_expiracao) >= datetime('now')
+  `).get(req.params.token);
+
+  if (tokenData) {
+    res.json({ valido: true, token: tokenData.token });
+  } else {
+    res.status(403).json({ valido: false, mensagem: 'Token inválido ou expirado' });
+  }
+});
+
 // ── Auth Admin ──
 app.post('/api/admin/login', (req, res) => {
   const { usuario, senha } = req.body;
