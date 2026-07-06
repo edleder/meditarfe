@@ -65,6 +65,13 @@ body {
   padding: 0 18px 32px;
 }
 
+@media (min-width: 769px) {
+  .app-container {
+    max-width: 720px;
+    padding: 0 32px 48px;
+  }
+}
+
 /* ── Header ───────────────────────────────────────────────────────────────── */
 .app-header {
   display: flex;
@@ -553,3 +560,62 @@ body {
 
 /* ── Hidden ───────────────────────────────────────────────────────────────── */
 .hidden { display: none !important; }
+
+/* ── Responsividade ───────────────────────────────────────────────────────── */
+
+/* Mobile (< 480px) */
+@media (max-width: 480px) {
+  .app-container { max-width: 100%; padding: 0 12px 24px; min-height: 100vh; }
+  .app-header { padding: 16px 0 12px; }
+  .logo-img { width: 80px; height: 80px; }
+  .page-dots { right: 12px; gap: 4px; }
+  .pdot { width: 5px; height: 5px; }
+  .card { border-radius: 20px; }
+  .card-hero { padding: 20px 16px; gap: 12px; }
+  .card-date { font-size: 12px; }
+  .tema-badge { font-size: 11px; padding: 4px 10px; }
+  .versiculo-ref { font-size: 12px; }
+  .versiculo-texto { font-size: 13px; line-height: 1.6; padding-left: 12px; }
+  .card-body { padding: 16px; }
+  .card-section { margin-bottom: 18px; }
+  .section-label-text { font-size: 12px; }
+  .section-body { font-size: 13px; line-height: 1.6; }
+  .ornament { font-size: 12px; margin: 14px 0; }
+  .btn-retry { padding: 10px 16px; font-size: 13px; width: 100%; }
+  .card-actions { gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .btn-icon { padding: 8px; font-size: 16px; }
+  .link-item { padding: 10px 12px; border-radius: 12px; }
+  .link-icon { font-size: 20px; }
+  .link-name { font-size: 12px; }
+  .link-handle { font-size: 11px; }
+  .link-arrow { font-size: 18px; }
+  .anuncio-item { padding: 12px 14px; border-radius: 12px; }
+  .anuncio-titulo { font-size: 12px; }
+  .anuncio-corpo { font-size: 12px; }
+  .hfc-logo { width: 48px; height: 48px; }
+}
+
+/* Tablet (480px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .app-container { max-width: 480px; padding: 0 16px 28px; }
+  .app-header { padding: 24px 0 18px; }
+  .logo-img { width: 100px; height: 100px; }
+  .card-hero { padding: 24px 20px; }
+  .card-body { padding: 20px; }
+  .section-label-text { font-size: 13px; }
+  .section-body { font-size: 14px; }
+}
+
+/* Desktop (> 768px) */
+@media (min-width: 769px) {
+  .app-container { max-width: 500px; padding: 0 20px 40px; }
+  .app-header { padding: 32px 0 24px; }
+  .logo-img { width: 140px; height: 140px; }
+  .card { border-radius: 32px; }
+  .card-hero { padding: 32px 28px; }
+  .card-body { padding: 28px; }
+  .card-section { margin-bottom: 28px; }
+  .section-label-text { font-size: 15px; }
+  .section-body { font-size: 15px; line-height: 1.7; }
+  .card-actions { gap: 12px; }
+}
