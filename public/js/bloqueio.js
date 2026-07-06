@@ -41,74 +41,40 @@ function mostrarPopupTrial(diasRestantes) {
 
   const popup = document.createElement('div');
   popup.id = 'popup-trial';
-
-  // Define cores baseado nos dias restantes
-  let bgColor, borderColor, textColor, emoji;
-  if (diasRestantes === 1) {
-    bgColor = 'rgba(220, 38, 38, 0.95)';
-    borderColor = '#dc2626';
-    textColor = '#fff';
-    emoji = '🔴';
-  } else if (diasRestantes <= 3) {
-    bgColor = 'rgba(255, 107, 53, 0.95)';
-    borderColor = '#ff6b35';
-    textColor = '#fff';
-    emoji = '⚡';
-  } else {
-    bgColor = 'rgba(255, 107, 53, 0.9)';
-    borderColor = '#e55100';
-    textColor = '#fff';
-    emoji = '💳';
-  }
-
   popup.style.cssText = `
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: ${bgColor};
-    border: 1px solid ${borderColor};
-    color: ${textColor};
-    padding: 16px 20px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    max-width: 320px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    background: rgba(255, 107, 53, 0.95);
+    color: #fff;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    max-width: 280px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     z-index: 1000;
     backdrop-filter: blur(8px);
     animation: slideIn 0.3s ease-out;
   `;
 
-  let mensagem, subTexto;
-  if (diasRestantes === 1) {
-    mensagem = '🔴 Último dia de teste!';
-    subTexto = 'Compre agora para continuar acessando';
-  } else if (diasRestantes <= 3) {
-    mensagem = `⚡ ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''} restante${diasRestantes > 1 ? 's' : ''}`;
-    subTexto = 'Seu acesso de teste está acabando';
-  } else {
-    mensagem = `💳 Teste gratuito: ${diasRestantes} dias`;
-    subTexto = 'Você está avaliando gratuitamente';
-  }
+  const mensagem = diasRestantes === 1
+    ? `Acesso livre: último dia`
+    : `Acesso livre: ${diasRestantes} dias restantes`;
 
   popup.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-      <div style="flex: 1;">
-        <div style="font-weight: 700; margin-bottom: 4px;">${mensagem}</div>
-        <div style="font-size: 12px; opacity: 0.9;">${subTexto}</div>
-      </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+      <span>${mensagem}</span>
       <button onclick="this.parentElement.parentElement.remove()" style="
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.15);
         border: none;
-        color: ${textColor};
+        color: #fff;
         cursor: pointer;
-        padding: 4px 6px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 700;
-        flex-shrink: 0;
-        transition: background 0.2s;
-      " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕</button>
+        padding: 3px 7px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 600;
+      ">✕</button>
     </div>
   `;
 
