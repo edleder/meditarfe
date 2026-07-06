@@ -707,8 +707,8 @@ body {
 
   /* Layout grid para página casal em desktop */
   .devocional-card {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     padding: 0 !important;
     background: transparent !important;
@@ -719,8 +719,9 @@ body {
 
   .devocional-card::before { display: none !important; }
 
-  /* Card hero (data + tema) em topo */
+  /* Card hero (data + tema) fullwidth */
   .devocional-card > .card-hero {
+    grid-column: 1 / -1;
     background: var(--card-bg);
     backdrop-filter: blur(28px) saturate(1.4);
     -webkit-backdrop-filter: blur(28px) saturate(1.4);
@@ -728,12 +729,7 @@ body {
     border-radius: 32px;
     position: relative;
     overflow: hidden;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    padding: 24px 32px !important;
-    min-height: auto !important;
+    padding: 28px 32px !important;
   }
 
   .devocional-card > .card-hero::before {
@@ -745,21 +741,18 @@ body {
     z-index: 1;
   }
 
-  /* Card body com versículo como card separado */
+  /* Card body (versículo) fullwidth */
   .devocional-card > .card-body {
+    grid-column: 1 / -1;
     background: var(--card-bg);
     backdrop-filter: blur(28px) saturate(1.4);
     -webkit-backdrop-filter: blur(28px) saturate(1.4);
     box-shadow: 0 40px 100px var(--shadow-deep), 0 12px 48px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.1);
     border-radius: 32px;
-    padding: 40px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 12px !important;
+    padding: 40px 32px !important;
     position: relative;
     overflow: hidden;
+    text-align: center;
   }
 
   .devocional-card > .card-body::before {
@@ -772,84 +765,53 @@ body {
   }
 
   .devocional-card .versiculo-ref {
-    position: static !important;
-    margin: 0 !important;
+    margin: 0 0 12px 0 !important;
     display: block !important;
   }
 
   .devocional-card .versiculo-texto {
-    position: static !important;
     border-left: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    width: 100%;
     font-size: 28px !important;
-    line-height: 1.7 !important;
+    line-height: 1.8 !important;
   }
 
   .devocional-card .ornament {
     display: none !important;
   }
 
-  /* Grid de cards para seções */
-  .devocional-card > .card-section {
-    grid-column: auto !important;
-  }
-
-  .devocional-card {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-    gap: 24px;
-  }
-
-  .devocional-card > .card-hero {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-
-  .devocional-card > .card-body {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
   /* Seções em grid de 3 colunas */
   .devocional-card > .card-section {
-    grid-column: auto;
+    background: var(--card-bg);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    border-radius: 32px;
+    padding: 32px 28px;
+    box-shadow: 0 40px 100px var(--shadow-deep), 0 12px 48px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 0 !important;
   }
 
-  .devocional-card > .card-section:nth-of-type(3) {
-    grid-column: 1;
-    grid-row: 3;
+  .devocional-card > .card-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent 100%);
+    z-index: 1;
   }
 
-  .devocional-card > .card-section:nth-of-type(4) {
-    grid-column: 2;
-    grid-row: 3;
+  .devocional-card > .card-section:hover {
+    box-shadow: 0 50px 120px var(--shadow-deep), 0 16px 60px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.15);
+    transform: translateY(-4px);
   }
 
-  .devocional-card > .card-section:nth-of-type(5) {
-    grid-column: 3;
-    grid-row: 3;
-  }
-
-  .devocional-card > .card-section:nth-of-type(6) {
-    grid-column: 1;
-    grid-row: 4;
-  }
-
-  .devocional-card > .card-section:nth-of-type(7) {
-    grid-column: 2;
-    grid-row: 4;
-  }
-
-  .devocional-card > .card-section:nth-of-type(8) {
-    grid-column: 3;
-    grid-row: 4;
-  }
-
-  .devocional-card > div:last-of-type {
-    grid-column: 1 / -1;
+  .devocional-card .section-body {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
   }
 
   /* Cada card-section vira um card individual */
