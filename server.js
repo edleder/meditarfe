@@ -91,6 +91,9 @@ app.get('/ela',            (_, res) => res.sendFile(path.join(__dirname, 'public
 app.get('/casal',          (req, res) => {
   res.sendFile(path.join(__dirname, 'public/casal.html'));
 });
+app.get('/staging',        (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/staging.html'));
+});
 app.get('/planos',         (_, res) => res.sendFile(path.join(__dirname, 'public/planos.html')));
 app.get('/validar-token',  (_, res) => res.sendFile(path.join(__dirname, 'public/validar-token.html')));
 app.get('/meu-devocional', (_, res) => res.sendFile(path.join(__dirname, 'public/meu-devocional.html')));
