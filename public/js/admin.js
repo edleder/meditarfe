@@ -816,13 +816,23 @@ async function carregarDashboard() {
   if (!r.ok) return;
   const d = await r.json();
 
+  // Carregar usuários online
+  let usuarios_online = 0;
+  try {
+    const ro = await api('GET', '/api/usuarios-online');
+    if (ro.ok) {
+      const uo = await ro.json();
+      usuarios_online = uo.length;
+    }
+  } catch (e) {}
+
   const stats = [
     { label: 'Devocionais Geral', valor: d.devocionais_geral, icon: '📖' },
     { label: 'Devocionais HFC',   valor: d.devocionais_hfc,   icon: '🛡️' },
     { label: 'Para Homem',        valor: d.devocionais_ele,   icon: '💪' },
     { label: 'Para Mulher',       valor: d.devocionais_ela,   icon: '👩' },
     { label: 'Para Casal',        valor: d.devocionais_casal, icon: '💕' },
-    { label: 'Usuários Ativos',   valor: d.usuarios_ativos,   icon: '👥' },
+    { label: 'Usuários Online',   valor: usuarios_online,     icon: '🟢' },
   ];
   document.getElementById('dashboardGrid').innerHTML = stats.map(s => `
     <div class="stat-card">
