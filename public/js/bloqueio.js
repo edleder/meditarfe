@@ -13,6 +13,46 @@ async function verificarAcesso() {
     return true;
   }
 
+  // Verifica token temporário na query string
+  const params = new URLSearchParams(window.location.search);
+  const tokenTemp = params.get('token');
+  if (tokenTemp) {
+    try {
+      const response = await fetch(`/api/validar-token/${tokenTemp}`);
+      if (response.ok) {
+        const dados = await response.json();
+        if (dados.valido) {
+          // Token temporário válido
+          localStorage.setItem('temp_token', tokenTemp);
+          // Remove o token da URL para não aparecer no histórico
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return true;
+        }
+      }
+    } catch (e) {
+      console.warn('Erro ao validar token:', e);
+    }
+  }
+
+  // Verifica se tem token temporário válido no localStorage
+  const tokenTemporario = localStorage.getItem('temp_token');
+  if (tokenTemporario) {
+    try {
+      const response = await fetch(`/api/validar-token/${tokenTemporario}`);
+      if (response.ok) {
+        const dados = await response.json();
+        if (dados.valido) {
+          return true;
+        } else {
+          localStorage.removeItem('temp_token');
+        }
+      }
+    } catch (e) {
+      console.warn('Erro ao validar token temporário:', e);
+      return true; // Fallback
+    }
+  }
+
   // Verifica se tem token de assinatura válido no localStorage
   const tokenAssinatura = localStorage.getItem('assinatura_token');
   const dataExpiracao = localStorage.getItem('assinatura_expira');
