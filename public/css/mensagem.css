@@ -740,25 +740,40 @@ body {
     z-index: 1;
   }
 
-  /* Versículo dentro do card-hero */
+  /* Versículo dentro do card-hero - flex layout */
   .devocional-card > .card-body {
     grid-column: 1 / -1;
-    display: contents;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex: 1 !important;
+    padding: 0 !important;
+    gap: 8px !important;
   }
 
   .devocional-card .versiculo-ref {
     position: static !important;
-    margin-bottom: 10px !important;
+    margin: 0 !important;
+    display: block !important;
   }
 
   .devocional-card .versiculo-texto {
     position: static !important;
     border-left: none !important;
-    padding: 0 12px !important;
+    padding: 0 !important;
     margin: 0 !important;
     width: 100%;
     font-size: 28px !important;
     line-height: 1.7 !important;
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .devocional-card .ornament {
+    display: none !important;
   }
 
   /* Cada card-section vira um card individual */
