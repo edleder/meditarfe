@@ -771,7 +771,7 @@ body {
 
   .devocional-card .versiculo-texto {
     border-left: none !important;
-    padding: 20px 40px !important;
+    padding: 20px 60px !important;
     margin: 0 !important;
     font-size: 28px !important;
     line-height: 1.8 !important;
@@ -791,14 +791,14 @@ body {
 
   .devocional-card .versiculo-texto::before {
     content: '\201C';
-    top: 12px;
-    left: 15px;
+    top: 8px;
+    left: 50px;
   }
 
   .devocional-card .versiculo-texto::after {
     content: '\201D';
-    bottom: 5px;
-    right: 15px;
+    bottom: 2px;
+    right: 50px;
   }
 
   .devocional-card .ornament {
