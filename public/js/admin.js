@@ -819,6 +819,9 @@ async function carregarDashboard() {
   const stats = [
     { label: 'Devocionais Geral', valor: d.devocionais_geral, icon: '📖' },
     { label: 'Devocionais HFC',   valor: d.devocionais_hfc,   icon: '🛡️' },
+    { label: 'Para Homem',        valor: d.devocionais_ele,   icon: '💪' },
+    { label: 'Para Mulher',       valor: d.devocionais_ela,   icon: '👩' },
+    { label: 'Para Casal',        valor: d.devocionais_casal, icon: '💕' },
     { label: 'Usuários Ativos',   valor: d.usuarios_ativos,   icon: '👥' },
   ];
   document.getElementById('dashboardGrid').innerHTML = stats.map(s => `
