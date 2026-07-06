@@ -633,16 +633,17 @@ body {
   .pdot { width: 5px; height: 5px; }
   .card { border-radius: 20px; }
   .card-hero { padding: 20px 16px; gap: 12px; }
-  .card-date { font-size: 12px; }
-  .tema-badge { font-size: 11px; padding: 4px 10px; }
-  .versiculo-ref { font-size: 12px; }
-  .versiculo-texto { font-size: 13px; line-height: 1.6; padding-left: 12px; }
+  .card-date { font-size: 13px; }
+  .tema-badge { font-size: 12px; padding: 5px 12px; }
+  .versiculo-ref { font-size: 13px; }
+  .versiculo-texto { font-size: 16px; line-height: 1.7; padding-left: 12px; }
   .card-body { padding: 16px; }
   .card-section { margin-bottom: 18px; }
-  .section-label-text { font-size: 12px; }
-  .section-body { font-size: 13px; line-height: 1.6; }
-  .ornament { font-size: 12px; margin: 14px 0; }
-  .btn-retry { padding: 10px 16px; font-size: 13px; width: 100%; }
+  .section-label { margin-bottom: 12px; }
+  .section-label-text { font-size: 13px; }
+  .section-body { font-size: 17px; line-height: 1.7; }
+  .ornament { font-size: 13px; margin: 14px 0; }
+  .btn-retry { padding: 10px 16px; font-size: 14px; width: 100%; }
   .card-actions { gap: 8px; margin-top: 16px; flex-wrap: wrap; }
   .btn-icon { padding: 8px; font-size: 16px; }
   .link-item { padding: 10px 12px; border-radius: 12px; }
