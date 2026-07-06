@@ -263,6 +263,16 @@ db.exec(`
     data_execucao TEXT DEFAULT (datetime('now', '-3 hours'))
   );
 
+  -- Tokens de acesso temporário (casal)
+  CREATE TABLE IF NOT EXISTS tokens_acesso (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    token TEXT UNIQUE NOT NULL,
+    descricao TEXT,
+    data_criacao TEXT DEFAULT (datetime('now')),
+    data_expiracao TEXT NOT NULL,
+    ativo INTEGER DEFAULT 1
+  );
+
   -- Assinaturas de usuários
   CREATE TABLE IF NOT EXISTS assinaturas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
