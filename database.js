@@ -285,6 +285,17 @@ db.exec(`
     ativo INTEGER DEFAULT 1,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  -- Usuários online (rastreamento de heartbeat)
+  CREATE TABLE IF NOT EXISTS usuarios_online (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessao_id TEXT UNIQUE NOT NULL,
+    pagina TEXT NOT NULL,
+    ip TEXT,
+    user_agent TEXT,
+    primeiro_acesso TEXT DEFAULT (datetime('now')),
+    ultimo_heartbeat TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 // Migrações
