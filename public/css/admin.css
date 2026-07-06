@@ -161,7 +161,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   box-shadow: 0 12px 40px rgba(201,169,110,0.25) !important;
 }
 .stat-icon  { font-size: 32px; margin-bottom: 12px; opacity: 0.9; }
-.stat-valor { font-size: 36px; font-weight: 700; color: var(--gold); line-height: 1.2; margin-bottom: 8px; }
+.stat-valor { font-size: 36px; font-weight: 700; color: #ff0000 !important; line-height: 1.2; margin-bottom: 8px; }
 .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 500; }
 
 .dashboard-two-col {
