@@ -99,6 +99,7 @@ const ABA_LOADERS = {
   ele:          () => carregarDevocionais('ele'),
   ela:          () => carregarDevocionais('ela'),
   casal:        () => carregarDevocionais('casal'),
+  tokens:       carregarTokens,
   anuncios:     carregarAnuncios,
   comunicados:  carregarComunicados,
   eventos:      carregarEventos,
