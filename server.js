@@ -134,6 +134,41 @@ app.get('/api/assinatura/validar/:token', (req, res) => {
   }
 });
 
+// Heartbeat para rastrear usuários online
+app.post('/api/heartbeat', (req, res) => {
+  try {
+    const sessao_id = req.body.sessao_id || crypto.randomBytes(16).toString('hex');
+    const pagina = req.body.pagina || req.get('referrer') || '/';
+    const ip = req.ip;
+    const user_agent = req.get('user-agent');
+
+    db.prepare(`
+      INSERT OR REPLACE INTO usuarios_online (sessao_id, pagina, ip, user_agent, ultimo_heartbeat)
+      VALUES (?, ?, ?, ?, datetime('now'))
+    `).run(sessao_id, pagina, ip, user_agent);
+
+    res.json({ ok: true, sessao_id });
+  } catch (e) {
+    console.error('Erro no heartbeat:', e);
+    res.status(500).json({ error: 'Erro ao registrar heartbeat' });
+  }
+});
+
+// API para listar usuários online (admin)
+app.get('/api/usuarios-online', auth, (req, res) => {
+  try {
+    const usuarios = db.prepare(`
+      SELECT * FROM usuarios_online
+      WHERE ultimo_heartbeat > datetime('now', '-2 minutes')
+      ORDER BY ultimo_heartbeat DESC
+    `).all();
+
+    res.json(usuarios);
+  } catch (e) {
+    res.status(500).json({ error: 'Erro ao buscar usuários online' });
+  }
+});
+
 // Webhook da Hotmart (recebe notificação de pagamento)
 app.post('/api/webhook/hotmart', (req, res) => {
   try {
