@@ -178,6 +178,12 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+@media (min-width: 769px) {
+  .card-hero {
+    padding: 48px 40px 36px;
+  }
+}
+
 .card-hero::before {
   content: '';
   position: absolute;
