@@ -3,3 +3,8 @@ builder = "NIXPACKS"
 
 [deploy]
 startCommand = "node --experimental-sqlite server.js"
+
+# Volume persistente para o banco de dados
+[[volumes]]
+source = "db-volume"
+destination = "/app/data"
