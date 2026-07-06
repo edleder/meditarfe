@@ -819,10 +819,7 @@ async function carregarDashboard() {
   const stats = [
     { label: 'Devocionais Geral', valor: d.devocionais_geral, icon: '📖' },
     { label: 'Devocionais HFC',   valor: d.devocionais_hfc,   icon: '🛡️' },
-    { label: 'Eventos Ativos',    valor: d.eventos_ativos,    icon: '🎟️' },
-    { label: 'Anúncios Ativos',   valor: d.anuncios_ativos,   icon: '📢' },
     { label: 'Usuários Ativos',   valor: d.usuarios_ativos,   icon: '👥' },
-    { label: 'Orações Pendentes', valor: d.pedidos_pendentes, icon: '🙏' },
   ];
   document.getElementById('dashboardGrid').innerHTML = stats.map(s => `
     <div class="stat-card">
