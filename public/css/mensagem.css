@@ -727,8 +727,9 @@ body {
     box-shadow: 0 40px 100px var(--shadow-deep), 0 12px 48px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.1);
     border-radius: 32px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 8px;
+    flex-wrap: wrap;
   }
 
   .devocional-card > .card-hero::before {
@@ -740,10 +741,32 @@ body {
     z-index: 1;
   }
 
-  /* Card body é um grid container */
+  /* Versículo dentro do card-hero */
   .devocional-card > .card-body {
     grid-column: 1 / -1;
     display: contents;
+  }
+
+  .devocional-card .versiculo-ref,
+  .devocional-card .versiculo-texto {
+    position: absolute;
+    top: 0;
+    left: 120px;
+    right: 0;
+    margin: 0 !important;
+  }
+
+  .devocional-card .versiculo-ref {
+    top: 20px;
+    left: 120px;
+  }
+
+  .devocional-card .versiculo-texto {
+    top: 45px;
+    left: 120px;
+    right: 32px;
+    border-left: none !important;
+    padding: 0 !important;
   }
 
   /* Cada card-section vira um card individual */
