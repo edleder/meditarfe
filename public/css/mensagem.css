@@ -684,8 +684,8 @@ body {
   /* Layout grid para página casal em desktop */
   .devocional-card {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
     padding: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
