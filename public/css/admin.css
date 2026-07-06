@@ -256,12 +256,20 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
 /* ── Forms ───────────────────────────────────────────────────────────────── */
 .form-card {
-  background: var(--card); border-radius: var(--radius);
-  border: 1px solid var(--border); padding: 24px;
+  background: var(--card); border-radius: 12px;
+  border: 1px solid var(--border); padding: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: border-color .2s;
 }
-.form-card.mt { margin-top: 20px; }
-.form-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-.form-card > p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.form-card:hover {
+  border-color: var(--border-light);
+}
+.form-card.mt { margin-top: 24px; }
+.form-card h3 {
+  font-size: 16px; font-weight: 700; margin-bottom: 8px;
+  color: var(--text); letter-spacing: -0.3px;
+}
+.form-card > p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
