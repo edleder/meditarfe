@@ -1,0 +1,32 @@
+name: Gerar Devocionais Automaticamente
+
+on:
+  schedule:
+    # Roda todo dia às 00:05 UTC (21:05 em Brasília, anterior ao horário da meia-noite local)
+    # Como o GitHub Actions roda em UTC, ajustamos para -3h de Brasília
+    - cron: '5 3 * * *'
+  workflow_dispatch: # Permite disparar manualmente
+
+jobs:
+  gerar-devocionais:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar geração de devocionais
+        run: |
+          curl -X POST https://www.meditarfe.com/api/admin/gerar-devocionais \
+            -H "x-admin-token: ${{ secrets.ADMIN_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            -w "\nStatus: %{http_code}\n"
+        env:
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+
+      - name: Notificar sucesso
+        if: success()
+        run: echo "✅ Devocionais gerados com sucesso!"
+
+      - name: Notificar erro
+        if: failure()
+        run: |
+          echo "❌ Erro ao gerar devocionais!"
+          exit 1
