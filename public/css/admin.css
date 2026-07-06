@@ -2,22 +2,22 @@
 
 :root {
   --sidebar-w: 240px;
-  --sidebar-bg: #1a0a0a;
+  --sidebar-bg: #0f0f0f;
   --sidebar-border: rgba(255,255,255,0.05);
-  --gold: #c9a96e;
-  --gold-dim: rgba(201,169,110,0.1);
-  --gold-dim2: rgba(201,169,110,0.06);
-  --accent: #a0722a;
-  --bg: #111009;
-  --surface: #1a1813;
-  --surface2: #221f18;
-  --card: #1e1c16;
-  --card-hover: #252118;
-  --text: #f0ebe0;
-  --text-muted: #8c7c66;
-  --text-faint: #4a4234;
-  --border: #2e2820;
-  --border-light: #38322a;
+  --orange: #ff6b35;
+  --orange-dim: rgba(255,107,53,0.1);
+  --orange-dim2: rgba(255,107,53,0.06);
+  --accent: #e55100;
+  --bg: #0a0a0a;
+  --surface: #121212;
+  --surface2: #1a1a1a;
+  --card: #161616;
+  --card-hover: #1f1f1f;
+  --text: #ffffff;
+  --text-muted: #9a9a9a;
+  --text-faint: #5a5a5a;
+  --border: #2a2a2a;
+  --border-light: #333333;
   --radius: 12px;
   --danger: #f87171;
   --danger-bg: rgba(248,113,113,0.1);
