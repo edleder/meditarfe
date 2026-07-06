@@ -791,14 +791,14 @@ body {
 
   .devocional-card .versiculo-texto::before {
     content: '\201C';
-    top: 18px;
-    left: 38px;
+    top: 12px;
+    left: 42px;
   }
 
   .devocional-card .versiculo-texto::after {
     content: '\201D';
-    bottom: 10px;
-    right: 0px;
+    bottom: 6px;
+    right: 42px;
   }
 
   .devocional-card .ornament {
