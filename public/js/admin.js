@@ -827,12 +827,12 @@ async function carregarDashboard() {
   } catch (e) {}
 
   const stats = [
-    { label: 'Devocionais Geral', valor: d.devocionais_geral, icon: '📖' },
-    { label: 'Devocionais HFC',   valor: d.devocionais_hfc,   icon: '🛡️' },
-    { label: 'Para Homem',        valor: d.devocionais_ele,   icon: '💪' },
-    { label: 'Para Mulher',       valor: d.devocionais_ela,   icon: '👩' },
-    { label: 'Para Casal',        valor: d.devocionais_casal, icon: '💕' },
-    { label: 'Usuários Online',   valor: usuarios_online,     icon: '🟢' },
+    { label: 'Devocionais Geral', valor: d.devocionais_geral, icon: '<i class="fas fa-book"></i>' },
+    { label: 'Devocionais HFC',   valor: d.devocionais_hfc,   icon: '<i class="fas fa-shield"></i>' },
+    { label: 'Para Homem',        valor: d.devocionais_ele,   icon: '<i class="fas fa-dumbbell"></i>' },
+    { label: 'Para Mulher',       valor: d.devocionais_ela,   icon: '<i class="fas fa-venus"></i>' },
+    { label: 'Para Casal',        valor: d.devocionais_casal, icon: '<i class="fas fa-heart"></i>' },
+    { label: 'Usuários Online',   valor: usuarios_online,     icon: '<i class="fas fa-circle" style="color: #10b981"></i>' },
   ];
   document.getElementById('dashboardGrid').innerHTML = stats.map(s => `
     <div class="stat-card">
