@@ -322,6 +322,13 @@ body {
   font-weight: 400;
 }
 
+@media (min-width: 769px) {
+  .section-body {
+    font-size: 20px;
+    line-height: 1.8;
+  }
+}
+
 /* ── Ornamento ────────────────────────────────────────────────────────────── */
 .ornament {
   text-align: center;
