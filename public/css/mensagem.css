@@ -179,21 +179,22 @@ body {
 /* ── Card Hero ────────────────────────────────────────────────────────────── */
 .card-hero {
   background: var(--card-hero);
-  padding: 28px 32px;
+  padding: 24px 32px 32px;
   text-align: center;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: center;
+  gap: 16px;
   min-height: 140px;
 }
 
 @media (min-width: 769px) {
   .card-hero {
-    padding: 32px 40px;
+    padding: 28px 40px 36px;
     min-height: 160px;
   }
 }
