@@ -90,6 +90,7 @@ const ABA_TITULOS = {
   eventos: 'Eventos', cursos: 'Cursos',
   agenda: 'Agenda', oracao: 'Pedidos de Oração', playlists: 'Playlists YouTube',
   links: 'Links & Redes Sociais',
+  online: 'Usuários Online Agora',
   usuarios: 'Usuários', configuracoes: 'Configurações', pulseiras: 'NFC / Pulseiras', logs: 'Logs de Acesso',
 };
 const ABA_LOADERS = {
