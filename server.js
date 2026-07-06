@@ -169,6 +169,47 @@ app.get('/api/usuarios-online', auth, (req, res) => {
   }
 });
 
+// API para relatórios e analytics
+app.get('/api/admin/analytics', auth, (req, res) => {
+  try {
+    // Usuários por página (últimos 7 dias)
+    const usuariosPorPagina = db.prepare(`
+      SELECT pagina, COUNT(*) as count FROM usuarios_online
+      WHERE ultimo_heartbeat > datetime('now', '-7 days')
+      GROUP BY pagina
+      ORDER BY count DESC
+      LIMIT 10
+    `).all();
+
+    // Total de acessos por dia (últimos 7 dias)
+    const acessosPorDia = db.prepare(`
+      SELECT DATE(created_at) as dia, COUNT(*) as total
+      FROM logs_acesso
+      WHERE created_at > datetime('now', '-7 days')
+      GROUP BY DATE(created_at)
+      ORDER BY dia ASC
+    `).all();
+
+    // Total de devocionais por tipo
+    const devocionaisPorTipo = {
+      geral: db.prepare("SELECT COUNT(*) as n FROM devocionais").get().n,
+      hfc: db.prepare("SELECT COUNT(*) as n FROM devocionais_hfc").get().n,
+      ele: db.prepare("SELECT COUNT(*) as n FROM devocionais_ele").get().n,
+      ela: db.prepare("SELECT COUNT(*) as n FROM devocionais_ela").get().n,
+      casal: db.prepare("SELECT COUNT(*) as n FROM devocionais_casal").get().n,
+    };
+
+    res.json({
+      usuariosPorPagina,
+      acessosPorDia,
+      devocionaisPorTipo
+    });
+  } catch (e) {
+    console.error('Erro em analytics:', e);
+    res.status(500).json({ error: 'Erro ao buscar analytics' });
+  }
+});
+
 // Webhook da Hotmart (recebe notificação de pagamento)
 app.post('/api/webhook/hotmart', (req, res) => {
   try {
