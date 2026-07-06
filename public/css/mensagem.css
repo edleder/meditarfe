@@ -219,8 +219,9 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   opacity: 0.9;
+  display: block;
 }
 
 .versiculo-texto {
