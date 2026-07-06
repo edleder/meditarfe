@@ -60,7 +60,15 @@ function dataHoje() {
 
 function formatarDataBR(dataStr) {
   const [ano, mes, dia] = dataStr.split('-');
-  return `• ${dia}/${mes}/${ano} •`;
+  const date = new Date(`${ano}-${mes}-${dia}T12:00:00`);
+
+  const diasSemana = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+  const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+
+  const diaSemana = diasSemana[date.getDay()];
+  const mesNome = meses[date.getMonth()];
+
+  return `• ${diaSemana} ${dia} de ${mesNome} de ${ano} •`;
 }
 
 function adicionarDias(dataStr, dias) {
