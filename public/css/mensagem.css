@@ -777,6 +777,11 @@ body {
     line-height: 1.8 !important;
   }
 
+  .devocional-card .versiculo-texto::before,
+  .devocional-card .versiculo-texto::after {
+    display: none !important;
+  }
+
   .devocional-card .ornament {
     display: none !important;
   }
