@@ -233,12 +233,20 @@ body {
   font-family: 'Playfair Display', 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 21px;
-  line-height: 1.6;
+  font-size: 26px;
+  line-height: 1.7;
   color: var(--text-ink);
   position: relative;
-  padding: 0 10px;
+  padding: 0 16px;
   min-height: 32px;
+  max-width: 90%;
+}
+
+@media (min-width: 769px) {
+  .versiculo-texto {
+    font-size: 28px;
+    padding: 0 20px;
+  }
 }
 
 /* Cursor piscando durante typewriter */
