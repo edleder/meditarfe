@@ -87,7 +87,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   transition: all 0.15s; border-radius: 0 8px 8px 0; margin: 1px 8px 1px 0;
 }
 .nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
-.nav-item.active { color: var(--orange); border-left-color: var(--orange); background: var(--gold-dim); }
+.nav-item.active { color: var(--orange); border-left-color: var(--orange); background: var(--orange-dim); }
 
 .logout-btn {
   margin: 12px; padding: 10px; background: rgba(255,255,255,0.03);
