@@ -85,7 +85,7 @@ function toggleSidebar() {
 // ── Abas ───────────────────────────────────────────────────────────────────
 const ABA_TITULOS = {
   dashboard: 'Dashboard',
-  devocional: 'Devocional Geral', hfc: 'Devocional HFC', gerar: 'Gerar com IA',
+  devocional: 'Devocional Geral', hfc: 'Devocional HFC', gerar: 'Gerar com IA', tokens: 'Tokens de Acesso',
   anuncios: 'Anúncios', comunicados: 'Comunicados',
   eventos: 'Eventos', cursos: 'Cursos',
   agenda: 'Agenda', oracao: 'Pedidos de Oração', playlists: 'Playlists YouTube',
