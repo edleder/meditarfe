@@ -748,26 +748,19 @@ body {
     display: contents;
   }
 
-  .devocional-card .versiculo-ref,
-  .devocional-card .versiculo-texto {
-    position: absolute;
-    top: 0;
-    left: 120px;
-    right: 0;
-    margin: 0 !important;
-  }
-
   .devocional-card .versiculo-ref {
-    top: 20px;
-    left: 120px;
+    position: static !important;
+    margin-bottom: 10px !important;
   }
 
   .devocional-card .versiculo-texto {
-    top: 45px;
-    left: 120px;
-    right: 32px;
+    position: static !important;
     border-left: none !important;
-    padding: 0 !important;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    width: 100%;
+    font-size: 28px !important;
+    line-height: 1.7 !important;
   }
 
   /* Cada card-section vira um card individual */
