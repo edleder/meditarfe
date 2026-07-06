@@ -85,6 +85,7 @@ function toggleSidebar() {
 // ── Abas ───────────────────────────────────────────────────────────────────
 const ABA_TITULOS = {
   dashboard: 'Dashboard',
+  relatorios: 'Relatórios & Analytics',
   devocional: 'Devocional Geral', hfc: 'Devocional HFC', gerar: 'Gerar com IA', tokens: 'Tokens de Acesso',
   anuncios: 'Anúncios', comunicados: 'Comunicados',
   eventos: 'Eventos', cursos: 'Cursos',
