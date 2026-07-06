@@ -1029,5 +1029,77 @@ async function deletarUsuario(id, nome) {
   else { const j = await r.json(); mostrarToast(j.error || 'Erro ao excluir'); }
 }
 
+// ── Tokens de Acesso ──────────────────────────────────────────────────────
+async function carregarTokens() {
+  const r = await api('GET', '/api/admin/tokens');
+  if (!r.ok) return;
+  const tokens = await r.json();
+
+  const html = tokens.length ? tokens.map(t => `
+    <div class="card-row">
+      <div style="flex:1">
+        <div style="font-weight:600;margin-bottom:0.25rem">${t.descricao || '(sem descrição)'}</div>
+        <div style="font-size:.8rem;color:var(--text-muted)">
+          Criado: ${new Date(t.data_criacao).toLocaleDateString('pt-BR', {timeZone:'America/Sao_Paulo'})} |
+          Expira: ${new Date(t.data_expiracao).toLocaleDateString('pt-BR', {timeZone:'America/Sao_Paulo'})}
+        </div>
+        <div style="font-family:monospace;font-size:.75rem;margin-top:0.5rem;word-break:break-all;color:var(--text-muted)">${t.token}</div>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <span class="badge ${t.status === 'ATIVO' ? 'badge-success' : 'badge-danger'}" style="padding:0.25rem 0.75rem;font-size:.75rem">${t.status}</span>
+        <button class="btn-icon" onclick="deletarToken(${t.id})" title="Deletar">🗑️</button>
+      </div>
+    </div>
+  `).join('') : '<p style="color:var(--text-muted);text-align:center;padding:2rem">Nenhum token criado ainda</p>';
+
+  document.getElementById('lista-tokens').innerHTML = html;
+}
+
+function abrirModalToken() {
+  document.getElementById('tokenDescricao').value = '';
+  document.getElementById('tokenDias').value = '7';
+  document.getElementById('tokenResultado').classList.add('hidden');
+  abrirModal('modalToken');
+}
+
+async function criarToken(e) {
+  e.preventDefault();
+  const descricao = document.getElementById('tokenDescricao').value.trim();
+  const dias = parseInt(document.getElementById('tokenDias').value);
+
+  const r = await api('POST', '/api/admin/token', { descricao, dias });
+  if (!r.ok) {
+    const j = await r.json();
+    mostrarToast(j.error || 'Erro ao criar token');
+    return;
+  }
+
+  const { token } = await r.json();
+  const baseUrl = window.location.origin;
+  const link = `${baseUrl}/casal?token=${token}`;
+
+  document.getElementById('tokenLink').textContent = link;
+  document.getElementById('tokenResultado').classList.remove('hidden');
+  document.getElementById('tokenDescricao').value = '';
+  mostrarToast('Token criado com sucesso!');
+  carregarTokens();
+}
+
+async function deletarToken(id) {
+  if (!confirm('Excluir este token?')) return;
+  const r = await api('DELETE', `/api/admin/token/${id}`);
+  if (r.ok) { mostrarToast('Token excluído'); carregarTokens(); }
+  else { mostrarToast('Erro ao excluir'); }
+}
+
+function copiarTokenLink() {
+  const link = document.getElementById('tokenLink').textContent;
+  navigator.clipboard.writeText(link).then(() => {
+    mostrarToast('Link copiado!');
+  }).catch(() => {
+    mostrarToast('Erro ao copiar');
+  });
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
 if (SESSION?.token) iniciarAdmin();
