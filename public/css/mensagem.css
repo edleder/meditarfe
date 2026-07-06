@@ -670,7 +670,7 @@ body {
 
 /* Desktop (> 768px) */
 @media (min-width: 769px) {
-  .app-container { max-width: 900px; padding: 0 20px 40px; }
+  .app-container { max-width: 1200px; padding: 0 24px 40px; }
   .app-header { padding: 32px 0 24px; }
   .logo-img { width: 140px; height: 140px; }
   .card { border-radius: 32px; }
