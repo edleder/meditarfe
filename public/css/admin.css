@@ -447,6 +447,27 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 }
 
 /* ── Tablet (480px - 768px) ──────────────────────────────────────────────────── */
+/* ── Analytics ──────────────────────────────────────────────────────────────── */
+.analytics-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px;
+}
+.analytics-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; transition: all 0.2s;
+}
+.analytics-card:hover { border-color: var(--border-light); background: var(--card-hover); }
+.analytics-card h3 {
+  font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text);
+}
+.stats-list { display: flex; flex-direction: column; gap: 12px; }
+.stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px; background: var(--surface); border-radius: 8px;
+  font-size: 13px; color: var(--text-muted);
+}
+.stat-row span { font-weight: 500; }
+.stat-row strong { color: var(--orange); }
+
 @media (max-width: 768px) {
   .sidebar {
     position: fixed; top: 0; left: 0; height: 100%;
