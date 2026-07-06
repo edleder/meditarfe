@@ -217,11 +217,7 @@ body {
   opacity: 0.85;
   flex-shrink: 0;
   white-space: nowrap;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  display: flex;
-  align-items: center;
-  padding: 12px 8px;
+  padding-right: 12px;
 }
 
 .versiculo-ref {
