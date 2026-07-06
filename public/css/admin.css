@@ -197,19 +197,32 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--gold));
-  color: #fff; border: none; padding: 9px 18px; border-radius: 8px;
+  color: #fff; border: none; padding: 10px 20px; border-radius: 8px;
   font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
-  transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.01em;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em; box-shadow: 0 4px 12px rgba(201,169,110,0.25);
 }
-.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(201,169,110,0.35);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
 .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
 .btn-secondary {
   background: transparent; color: var(--text-muted); border: 1.5px solid var(--border);
-  padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: inherit; transition: all 0.15s;
+  padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: all 0.25s;
 }
-.btn-secondary:hover { background: var(--surface2); color: var(--text); border-color: var(--border-light); }
+.btn-secondary:hover {
+  background: var(--surface2);
+  color: var(--text);
+  border-color: var(--border-light);
+  transform: translateY(-1px);
+}
 .btn-secondary:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .btn-icon {
