@@ -90,6 +90,14 @@ body {
   animation: logoPulse 3.5s ease-in-out infinite;
 }
 
+@media (min-width: 769px) {
+  .logo-img {
+    width: 160px;
+    height: 160px;
+    filter: drop-shadow(0 8px 32px rgba(201,169,110,0.6));
+  }
+}
+
 @keyframes logoPulse {
   0%, 100% { filter: drop-shadow(0 4px 16px rgba(201,169,110,0.35)); }
   50%       { filter: drop-shadow(0 4px 28px rgba(201,169,110,0.65)) drop-shadow(0 0 12px rgba(201,169,110,0.3)); }
