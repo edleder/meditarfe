@@ -670,7 +670,7 @@ body {
 
 /* Desktop (> 768px) */
 @media (min-width: 769px) {
-  .app-container { max-width: 500px; padding: 0 20px 40px; }
+  .app-container { max-width: 900px; padding: 0 20px 40px; }
   .app-header { padding: 32px 0 24px; }
   .logo-img { width: 140px; height: 140px; }
   .card { border-radius: 32px; }
@@ -680,4 +680,90 @@ body {
   .section-label-text { font-size: 15px; }
   .section-body { font-size: 15px; line-height: 1.7; }
   .card-actions { gap: 12px; }
+
+  /* Layout grid para página casal em desktop */
+  .devocional-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border: none !important;
+  }
+
+  .devocional-card::before { display: none !important; }
+
+  /* Card hero (data + versículo) em grid spanning */
+  .devocional-card > .card-hero {
+    grid-column: 1 / -1;
+    background: var(--card-bg);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    box-shadow: 0 40px 100px var(--shadow-deep), 0 12px 48px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.1);
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .devocional-card > .card-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent 100%);
+    z-index: 1;
+  }
+
+  /* Card body é um grid container */
+  .devocional-card > .card-body {
+    grid-column: 1 / -1;
+    display: contents;
+  }
+
+  /* Cada card-section vira um card individual */
+  .card-section {
+    background: var(--card-bg);
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    border-radius: 32px;
+    padding: 32px 28px;
+    box-shadow: 0 40px 100px var(--shadow-deep), 0 12px 48px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 0 !important;
+  }
+
+  .card-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent 100%);
+    z-index: 1;
+  }
+
+  .card-section:hover {
+    box-shadow: 0 50px 120px var(--shadow-deep), 0 16px 60px var(--shadow-soft), 0 0 0 1px rgba(255,248,230,0.15);
+    transform: translateY(-4px);
+  }
+
+  /* Ornamento e elementos de layout não viram cards */
+  .devocional-card > .ornament {
+    display: none;
+  }
+
+  /* Última frase fica em um card fullwidth */
+  .devocional-card > div:last-of-type {
+    grid-column: 1 / -1;
+    background: rgba(201, 169, 110, 0.08);
+    backdrop-filter: blur(28px) saturate(1.4);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 32px;
+    padding: 32px 28px;
+    text-align: center;
+  }
 }
