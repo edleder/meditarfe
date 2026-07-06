@@ -262,9 +262,19 @@ body {
   background: transparent;
 }
 
+@media (min-width: 769px) {
+  .card-body {
+    padding: 40px 40px 32px;
+  }
+}
+
 /* ── Section ──────────────────────────────────────────────────────────────── */
 .card-section { margin-bottom: 24px; }
 .card-section:last-child { margin-bottom: 0; }
+
+@media (min-width: 769px) {
+  .card-section { margin-bottom: 32px; }
+}
 
 .section-label {
   display: flex;
