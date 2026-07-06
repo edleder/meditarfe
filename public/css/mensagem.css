@@ -665,7 +665,7 @@ body {
   .card-section { margin-bottom: 18px; }
   .section-label { margin-bottom: 12px; }
   .section-label-text { font-size: 13px; }
-  .section-body { font-size: 17px; line-height: 1.7; }
+  .section-body { font-size: 19px; line-height: 1.7; }
   .ornament { font-size: 13px; margin: 14px 0; }
   .btn-retry { padding: 10px 16px; font-size: 14px; width: 100%; }
   .card-actions { gap: 8px; margin-top: 16px; flex-wrap: wrap; }
