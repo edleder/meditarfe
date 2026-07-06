@@ -221,22 +221,27 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
 /* ── Cards / Tables ──────────────────────────────────────────────────────── */
 .data-table {
-  background: var(--card); border-radius: var(--radius);
-  border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px;
+  background: var(--card); border-radius: 12px;
+  border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 .data-table table { width: 100%; border-collapse: collapse; }
 .data-table th {
-  background: var(--surface); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
-  padding: 11px 16px; text-align: left; border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 100%);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted);
+  padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border);
 }
 .data-table td {
-  padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border);
+  padding: 14px 16px; font-size: 13px; border-bottom: 1px solid var(--border);
   vertical-align: middle; color: var(--text);
 }
 .data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: var(--card-hover); }
-.data-table .empty { text-align: center; color: var(--text-faint); padding: 40px !important; font-size: 13px; }
+.data-table tr:hover td {
+  background: var(--card-hover);
+  transition: background .15s;
+}
+.data-table .empty { text-align: center; color: var(--text-faint); padding: 48px 16px !important; font-size: 13px; }
 .data-table .text-muted { color: var(--text-muted); font-size: 12px; }
 
 .badge {
