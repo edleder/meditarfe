@@ -96,6 +96,7 @@ const ABA_TITULOS = {
 };
 const ABA_LOADERS = {
   dashboard:    carregarDashboard,
+  relatorios:   carregarRelatorios,
   devocional:   () => carregarDevocionais('geral'),
   hfc:          () => carregarDevocionais('hfc'),
   ele:          () => carregarDevocionais('ele'),
