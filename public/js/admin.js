@@ -851,6 +851,53 @@ async function carregarDashboard() {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+// USUÁRIOS ONLINE
+// ══════════════════════════════════════════════════════════════════════
+async function carregarOnline() {
+  const r = await api('GET', '/api/usuarios-online');
+  if (!r.ok) return;
+  const usuarios = await r.json();
+
+  if (!usuarios.length) {
+    document.getElementById('lista-online').innerHTML = '<p class="text-muted" style="text-align:center;padding:40px;font-size:14px"><i class="fas fa-wifi" style="opacity:0.5;margin-right:8px;"></i>Ninguém online no momento</p>';
+    return;
+  }
+
+  const html = `
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%">🟢 Página</th>
+            <th style="width: 20%">IP</th>
+            <th style="width: 35%">Navegador</th>
+            <th style="width: 20%">Último Acesso</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${usuarios.map(u => `
+            <tr>
+              <td><strong style="color: var(--orange)">${u.pagina}</strong></td>
+              <td><code style="font-size: 11px; color: var(--text-muted)">${u.ip}</code></td>
+              <td style="font-size: 12px; color: var(--text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${u.user_agent || '—'}</td>
+              <td style="color: var(--text-muted); font-size: 12px;">${fmtDataHora(u.ultimo_heartbeat)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('lista-online').innerHTML = html;
+}
+
+function recarregarOnline() {
+  carregarOnline();
+}
+
+// Auto-atualiza a cada 10 segundos
+let intervalOnline = null;
+
+// ══════════════════════════════════════════════════════════════════════
 // CONFIGURAÇÕES
 // ══════════════════════════════════════════════════════════════════════
 async function carregarConfiguracoes() {
