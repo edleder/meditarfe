@@ -855,6 +855,102 @@ async function carregarDashboard() {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+// RELATÓRIOS & ANALYTICS
+// ══════════════════════════════════════════════════════════════════════
+let chartAcessos = null;
+let chartPaginas = null;
+
+async function carregarRelatorios() {
+  const r = await api('GET', '/api/admin/analytics');
+  if (!r.ok) return;
+  const d = await r.json();
+
+  const html = `
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <h3>📈 Acessos por Dia (7 dias)</h3>
+        <canvas id="chartAcessos" style="max-height: 300px;"></canvas>
+      </div>
+      <div class="analytics-card">
+        <h3>📄 Páginas Mais Visitadas</h3>
+        <canvas id="chartPaginas" style="max-height: 300px;"></canvas>
+      </div>
+      <div class="analytics-card">
+        <h3>📚 Devocionais por Tipo</h3>
+        <div class="stats-list">
+          ${Object.entries(d.devocionaisPorTipo).map(([tipo, count]) => `
+            <div class="stat-row">
+              <span>${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>
+              <strong style="color: var(--orange)">${count}</strong>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('relatorios-container').innerHTML = html;
+
+  // Gráfico de acessos
+  const ctxAcessos = document.getElementById('chartAcessos')?.getContext('2d');
+  if (ctxAcessos && Chart) {
+    if (chartAcessos) chartAcessos.destroy();
+    chartAcessos = new Chart(ctxAcessos, {
+      type: 'line',
+      data: {
+        labels: d.acessosPorDia.map(a => a.dia),
+        datasets: [{
+          label: 'Acessos',
+          data: d.acessosPorDia.map(a => a.total),
+          borderColor: '#ff6b35',
+          backgroundColor: 'rgba(255,107,53,0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: 'rgba(255,255,255,0.7)' } } },
+        scales: {
+          y: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+  }
+
+  // Gráfico de páginas
+  const ctxPaginas = document.getElementById('chartPaginas')?.getContext('2d');
+  if (ctxPaginas && Chart) {
+    if (chartPaginas) chartPaginas.destroy();
+    chartPaginas = new Chart(ctxPaginas, {
+      type: 'bar',
+      data: {
+        labels: d.usuariosPorPagina.map(p => p.pagina),
+        datasets: [{
+          label: 'Acessos',
+          data: d.usuariosPorPagina.map(p => p.count),
+          backgroundColor: '#ff6b35',
+          borderColor: '#e55100',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: 'rgba(255,255,255,0.7)' } } },
+        scales: {
+          y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } },
+          x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
 // USUÁRIOS ONLINE
 // ══════════════════════════════════════════════════════════════════════
 async function carregarOnline() {
