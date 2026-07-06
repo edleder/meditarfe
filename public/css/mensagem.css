@@ -222,34 +222,39 @@ body {
 
 .versiculo-ref {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600 !important;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-light);
-  margin-bottom: 14px !important;
+  margin-bottom: 8px !important;
   opacity: 0.9;
   display: block !important;
   width: 100% !important;
+  text-align: center;
 }
 
 .versiculo-texto {
   font-family: 'Playfair Display', 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 26px;
-  line-height: 1.7;
+  font-size: 24px;
+  line-height: 1.6;
   color: var(--text-ink);
   position: relative;
-  padding: 0 16px;
+  padding: 0 12px;
   min-height: 32px;
-  max-width: 90%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 @media (min-width: 769px) {
   .versiculo-texto {
     font-size: 28px;
-    padding: 0 20px;
+    padding: 0 16px;
   }
 }
 
