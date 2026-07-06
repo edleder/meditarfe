@@ -115,9 +115,12 @@ async function verificarAcesso() {
 
   // Verifica trial de 7 dias para página casal
   if (window.location.pathname === '/casal') {
-    if (!verificarTrial()) {
+    const trialValido = verificarTrial();
+    if (!trialValido) {
       return false;
     }
+    // Trial ativo - permite acesso sem precisar de assinatura
+    return true;
   }
 
   // Verifica token temporário na query string
