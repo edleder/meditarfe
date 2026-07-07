@@ -198,7 +198,7 @@ Fale como quem entende: pressão por perfeição, crítica do próprio corpo, d�
 1. Um versículo bíblico altamente relevante (escolha com cuidado — não use o mesmo repetidamente)
 2. Uma reflexão que reconheça as lutas REAIS dessa audiência (3-4 frases, desafiadora e esperançosa)
 3. Uma prática/aplicação CONCRETA e ESPECÍFICA para hoje (algo que essa pessoa possa fazer nas próximas horas)
-4. Um tema principal (2-3 palavras)
+4. Um tema principal DIFERENTE E VARIADO (2-3 palavras) — CRIATIVO e que ainda não foi usado
 
 ${contexto}
 
@@ -217,7 +217,8 @@ Importante:
 - A reflexão deve oferecer esperança bíblica real, não só conforto vazio.
 - A prática deve ser TÃO ESPECÍFICA que a pessoa saiba EXATAMENTE o que fazer.
 - Escolha versículos que se conectam PROFUNDAMENTE com o tema, não superficialmente.
-- Varie os livros bíblicos — explore TODO Antigo e Novo Testamento${avisoRepeticao}`;
+- Varie os livros bíblicos — explore TODO Antigo e Novo Testamento.
+- **TEMA OBRIGATÓRIO**: Crie um tema COMPLETAMENTE DIFERENTE dos anteriores. Explore aspectos diferentes do cristianismo, relacionamentos, crescimento pessoal, batalhas espirituais, alegria, luto, perdão, comunidade, intimidade com Deus, etc. SER CRIATIVO!${avisoRepeticao}`;
 
   const content = await chamarGroq(prompt);
 
