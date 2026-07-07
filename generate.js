@@ -62,11 +62,12 @@ async function gerarDevocionalCasal(dataStr) {
 
   console.log(`Gerando devocional CASAL completo para ${dataStr}...`);
 
-  const recentes = db.prepare(`SELECT versiculo_referencia FROM ${tabela} ORDER BY data DESC LIMIT 20`).all();
+  const recentes = db.prepare(`SELECT versiculo_referencia, tema FROM ${tabela} ORDER BY data DESC LIMIT 20`).all();
   const versiculosUsados = recentes.map(r => r.versiculo_referencia).join(', ');
-  const avisoRepeticao = versiculosUsados ? `\n\nVERSÍCULOS JÁ USADOS (NÃO repita): ${versiculosUsados}` : '';
+  const temasUsados = recentes.map(r => r.tema).join(', ');
+  const avisoRepeticao = versiculosUsados ? `\n\nVERSÍCULOS JÁ USADOS (NÃO repita): ${versiculosUsados}\n\nTEMAS JÁ USADOS (VARIE BASTANTE - SER CRIATIVO!): ${temasUsados}` : '';
 
-  const prompt = `VOCÊ ESTÁ CRIANDO UM DEVOCIONAL PARA CASAIS. GERE COM TODOS OS CAMPOS OBRIGATÓRIOS.
+  const prompt = `VOCÊ ESTÁ CRIANDO UM DEVOCIONAL PARA CASAIS. GERE COM TODOS OS CAMPOS OBRIGATÓRIOS E TEMAS VARIADOS!
 
 ESTRUTURA OBRIGATÓRIA (TODOS os 7 campos devem estar preenchidos):
 
