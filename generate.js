@@ -69,9 +69,9 @@ async function gerarDevocionalCasal(dataStr) {
 
   const prompt = `VOCÊ ESTÁ CRIANDO UM DEVOCIONAL PARA CASAIS. GERE COM TODOS OS CAMPOS OBRIGATÓRIOS E TEMAS VARIADOS!
 
-ESTRUTURA OBRIGATÓRIA (TODOS os 7 campos devem estar preenchidos):
+ESTRUTURA OBRIGATÓRIA (TODOS os 8 campos devem estar preenchidos):
 
-1. TEMA: Um título profundo (3-4 palavras)
+1. TEMA: Um título profundo e DIFERENTE (3-4 palavras) - SER CRIATIVO E VARIAR DOS ANTERIORES!
 2. VERSÍCULO: Um versículo bíblico (formato: Livro capítulo:versículo)
 3. REFLEXÃO: 4-5 frases honestas sobre casamento
 4. MEDITAÇÃO GUIADA: 4 pontos com "•" para casal fazer junto
